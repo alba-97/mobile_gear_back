@@ -13,7 +13,10 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [
+      "https://mobile-gear-front-mu.vercel.app",
+      "https://mobile-gear-front-git-develop-alba-97.vercel.app/",
+    ],
     credentials: true,
   })
 );
