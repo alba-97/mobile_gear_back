@@ -12,9 +12,10 @@ const login = async (req, res) => {
     if (!isValid) return res.sendStatus(401);
 
     const payload = {
+      id: user.id,
       email: user.email,
       password: user.password,
-      isAdmin: user.is_admin,
+      is_admin: user.is_admin,
     };
 
     const token = generateToken(payload);
@@ -39,6 +40,7 @@ const logout = (req, res) => {
 
 const me = async (req, res) => {
   const user = await Users.findOne({
+    where: { id: Number(req.user.id) },
     attributes: { exclude: ["password", "salt"] },
   });
   res.send(user);
