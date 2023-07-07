@@ -93,7 +93,6 @@ module.exports = {
   login,
   signup,
   logout,
-  secret,
   me,
   listUsers,
   switchPrivileges,
