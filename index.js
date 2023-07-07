@@ -11,9 +11,11 @@ const app = express();
 
 app.use(express.json());
 
+const ORIGIN = process.env.ORIGIN || "http://localhost:8080";
+
 app.use(
   cors({
-    origin: "https://mobile-gear-front.onrender.com",
+    origin: ORIGIN,
     credentials: true,
   })
 );

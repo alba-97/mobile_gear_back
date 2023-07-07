@@ -3,24 +3,22 @@ const { Users } = require("../models");
 
 const login = async (req, res) => {
   try {
+    const { email, password } = req.body;
     const user = await Users.findOne({
-      where: { email: req.body.email },
+      where: { email },
     });
     if (!user) return res.sendStatus(401);
-    const { id, email, is_admin, username, checkoutId } = user;
-    user.validatePassword(req.body.password).then((isValid) => {
-      if (!isValid) return res.sendStatus(401);
-      else {
-        const token = generateToken({
-          id,
-          username,
-          is_admin,
-          email,
-          checkoutId,
-        });
-        res.status(200).send(token);
-      }
-    });
+    const isValid = await user.validatePassword(password);
+    if (!isValid) return res.sendStatus(401);
+
+    const payload = {
+      email: user.email,
+      password: user.password,
+      isAdmin: user.is_admin,
+    };
+
+    const token = generateToken(payload);
+    res.cookie("token", token).send(user);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -36,24 +34,15 @@ const signup = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  req.user = {};
+  res.clearCookie("token");
   res.sendStatus(204);
 };
 
-const secret = (req, res) => {
-  try {
-    const token = req.headers.authorization;
-    const { payload } = validateToken(token);
-    req.user = payload;
-    res.send(payload);
-  } catch (err) {
-    console.log(err);
-    res.status(402).send(err);
-  }
-};
-
-const me = (req, res) => {
-  res.send(req.user);
+const me = async (req, res) => {
+  const user = await Users.findOne({
+    attributes: { exclude: ["password", "salt"] },
+  });
+  res.send(user);
 };
 
 const listUsers = async (req, res) => {
