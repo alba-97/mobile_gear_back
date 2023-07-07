@@ -13,12 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://mobile-gear-front-mu.vercel.app",
-      "https://mobile-gear-front-alba-97.vercel.app",
-      "https://mobile-gear-front-git-develop-alba-97.vercel.app",
-    ],
+    origin: "https://mobile-gear-front.onrender.com",
     credentials: true,
   })
 );
@@ -26,12 +21,13 @@ app.use(cookieParser());
 
 app.use("/", routes);
 
-const force = true;
+const force = false;
 
 db.sync({ force })
   .then(function () {
     if (force) {
       seeder();
+      console.log("Fake data created");
     }
     app.listen(8080, () => console.log("Server listening on port 8080"));
   })
