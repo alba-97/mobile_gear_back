@@ -42,9 +42,14 @@ const logout = (req, res) => {
 };
 
 const secret = (req, res) => {
-  const { payload } = validateToken(req.cookies.token);
-  req.user = payload;
-  res.send(payload);
+  try {
+    const { payload } = validateToken(req.cookies.token);
+    req.user = payload;
+    res.send(payload);
+  } catch (err) {
+    console.log(err);
+    res.status(402).send(err);
+  }
 };
 
 const me = (req, res) => {
