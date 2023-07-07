@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      "http://localhost:3000",
       "https://mobile-gear-front-mu.vercel.app",
       "https://mobile-gear-front-alba-97.vercel.app",
       "https://mobile-gear-front-git-develop-alba-97.vercel.app",
