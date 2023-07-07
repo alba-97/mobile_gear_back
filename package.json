@@ -5,19 +5,20 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "vercel-build": "echo hello"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sheinken88/mobile_gear_back.git"
+    "url": "git+https://github.com/alba-97/mobile_gear_back.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sheinken88/mobile_gear_back/issues"
+    "url": "https://github.com/alba-97/mobile_gear_back/issues"
   },
-  "homepage": "https://github.com/sheinken88/mobile_gear_back#readme",
+  "homepage": "https://github.com/alba-97/mobile_gear_back#readme",
   "dependencies": {
     "@faker-js/faker": "^8.0.0",
     "@vercel/postgres": "^0.4.0",
