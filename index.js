@@ -15,7 +15,8 @@ app.use(
   cors({
     origin: [
       "https://mobile-gear-front-mu.vercel.app",
-      "https://mobile-gear-front-git-develop-alba-97.vercel.app/",
+      "https://mobile-gear-front-alba-97.vercel.app",
+      "https://mobile-gear-front-git-develop-alba-97.vercel.app",
     ],
     credentials: true,
   })
