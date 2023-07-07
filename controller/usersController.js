@@ -43,7 +43,6 @@ const logout = (req, res) => {
 
 const secret = (req, res) => {
   try {
-    console.log(req.cookies);
     const { payload } = validateToken(req.cookies.token);
     req.user = payload;
     res.send(payload);

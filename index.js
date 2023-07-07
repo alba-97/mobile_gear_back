@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://mobile-gear-front.onrender.com",
+    origin: "https://mobilegear.netlify.app",
     credentials: true,
   })
 );
