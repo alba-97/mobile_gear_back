@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.URL,
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use("/", routes);
 
-const force = false;
+const force = true;
 
 db.sync({ force })
   .then(function () {
