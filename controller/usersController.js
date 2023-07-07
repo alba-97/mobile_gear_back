@@ -18,8 +18,7 @@ const login = async (req, res) => {
           email,
           checkoutId,
         });
-        res.cookie("token", token);
-        res.sendStatus(200);
+        res.status(200).send(token);
       }
     });
   } catch (err) {
@@ -37,7 +36,7 @@ const signup = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("token");
+  req.user = {};
   res.sendStatus(204);
 };
 
