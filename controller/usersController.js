@@ -1,4 +1,4 @@
-const { generateToken, validateToken } = require("../config/tokens");
+const { generateToken } = require("../config/tokens");
 const { Users } = require("../models");
 
 const login = async (req, res) => {
@@ -18,7 +18,7 @@ const login = async (req, res) => {
     };
 
     const token = generateToken(payload);
-    res.cookie("token", token).send(user);
+    res.send(user, token);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -34,7 +34,6 @@ const signup = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("token");
   res.sendStatus(204);
 };
 
