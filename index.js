@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "https://google.com",
       "https://mobile-gear-front-mu.vercel.app",
       "https://mobile-gear-front-alba-97.vercel.app",
       "https://mobile-gear-front-git-develop-alba-97.vercel.app",
@@ -35,6 +34,6 @@ db.sync({ force })
     }
     app.listen(8080, () => console.log("Server listening on port 8080"));
   })
-  .catch(console.error);
+  .catch((error) => console.log(error));
 
 module.exports = app;
