@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use("/", routes);
 
-const force = false;
+const force = true;
 
 db.sync({ force })
   .then(function () {
