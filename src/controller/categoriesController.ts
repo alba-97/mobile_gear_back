@@ -1,7 +1,6 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Categories } from "../models/Categories";
-import { Products } from "../models/Products";
+import { Categories, Products } from "../models";
 
 export const listCategories = async (_: CustomRequest, res: Response) => {
   try {

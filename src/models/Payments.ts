@@ -1,13 +1,13 @@
-import Sequelize from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class Payments extends Sequelize.Model {}
+class Payments extends Model {}
 
 Payments.init(
   {
-    type: { type: Sequelize.STRING },
+    type: { type: DataTypes.STRING },
   },
   { sequelize: db, modelName: "payments" }
 );
 
-export { Payments };
+export default Payments;

@@ -1,14 +1,14 @@
-import Sequelize from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class Categories extends Sequelize.Model {
-  public id!: number;
-  public name!: string;
+class Categories extends Model {
+  id: number;
+  name: string;
 }
 Categories.init(
   {
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
@@ -18,4 +18,4 @@ Categories.init(
   }
 );
 
-export { Categories };
+export default Categories;

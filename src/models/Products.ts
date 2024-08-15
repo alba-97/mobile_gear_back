@@ -1,10 +1,8 @@
-import { Brands } from "./Brands.js";
-import { Categories } from "./Categories.js";
+import { Model, DataTypes } from "sequelize";
 
-import Sequelize from "sequelize";
 import db from "../db";
 
-class Products extends Sequelize.Model {
+class Products extends Model {
   name: string;
   product_img: string;
   description: string;
@@ -16,33 +14,33 @@ class Products extends Sequelize.Model {
 Products.init(
   {
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
 
     product_img: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
 
     description: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
     },
 
     features: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
     },
 
     price: {
-      type: Sequelize.FLOAT,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
 
     discount: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
 
     stock: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
@@ -52,7 +50,4 @@ Products.init(
   }
 );
 
-Products.belongsTo(Brands);
-Products.belongsTo(Categories);
-
-export { Products };
+export default Products;

@@ -1,31 +1,31 @@
-import Sequelize from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class PaymentInfo extends Sequelize.Model {}
+class PaymentInfo extends Model {}
 PaymentInfo.init(
   {
     first_name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     last_name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     birth_date: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     dni: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       unique: true,
     },
     address: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
     },
 
     phone_number: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
   },
   {
@@ -34,4 +34,4 @@ PaymentInfo.init(
   }
 );
 
-export { PaymentInfo };
+export default PaymentInfo;

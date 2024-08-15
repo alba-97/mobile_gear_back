@@ -1,13 +1,10 @@
-import { Orders } from "./Orders";
-import { Products } from "./Products";
-import { Users } from "./Users";
+import { Model, DataTypes } from "sequelize";
 
-import Sequelize from "sequelize";
 import db from "../db";
 import { Product } from "../interfaces/Product";
 import { Order } from "../interfaces/Order";
 
-class ProductOrders extends Sequelize.Model {
+class ProductOrders extends Model {
   id: number;
   qty: number;
   order: Order;
@@ -17,14 +14,10 @@ class ProductOrders extends Sequelize.Model {
 ProductOrders.init(
   {
     qty: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
   },
   { sequelize: db, modelName: "productorders" }
 );
 
-ProductOrders.belongsTo(Products);
-ProductOrders.belongsTo(Users);
-ProductOrders.belongsTo(Orders);
-
-export { ProductOrders };
+export default ProductOrders;

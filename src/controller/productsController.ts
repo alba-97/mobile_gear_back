@@ -1,9 +1,7 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Brands } from "../models/Brands";
-import { Categories } from "../models/Categories";
-import { Products } from "../models/Products";
 import { Op } from "sequelize";
+import { Brands, Categories, Products } from "../models";
 
 export const listProducts = async (_: CustomRequest, res: Response) => {
   try {

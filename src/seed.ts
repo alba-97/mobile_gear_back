@@ -1,11 +1,12 @@
-import { Brands } from "./models/Brands";
-import { Categories } from "./models/Categories";
-import { Deliverys } from "./models/Deliverys";
-import { Orders } from "./models/Orders";
-import { ProductOrders } from "./models/ProductOrders";
-import { Products } from "./models/Products";
-import { Users } from "./models/Users";
-
+import {
+  Brands,
+  Categories,
+  Deliverys,
+  Orders,
+  Products,
+  Users,
+} from "./models";
+import ProductOrders from "./models/ProductOrders";
 import products from "./products.json";
 
 const seeder = async () => {

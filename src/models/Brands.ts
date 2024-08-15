@@ -1,14 +1,14 @@
-import Sequelize from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class Brands extends Sequelize.Model {
-  public id!: number;
-  public name!: string;
+class Brands extends Model {
+  id: number;
+  name: string;
 }
 Brands.init(
   {
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
@@ -18,4 +18,4 @@ Brands.init(
   }
 );
 
-export { Brands };
+export default Brands;

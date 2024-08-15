@@ -1,16 +1,13 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Deliverys } from "../models/Deliverys";
-import { Orders } from "../models/Orders";
-import { ProductOrders } from "../models/ProductOrders";
-import { Products } from "../models/Products";
-import { Users } from "../models/Users";
 import { ProductOrder } from "../interfaces/ProductOrder";
 
 import dotenv from "dotenv";
 dotenv.config();
 
 import transporter from "../mailTransporter";
+import { Deliverys, Orders, Products, Users } from "../models";
+import ProductOrders from "../models/ProductOrders";
 
 export const confirmPurchase = async (req: CustomRequest, res: Response) => {
   try {

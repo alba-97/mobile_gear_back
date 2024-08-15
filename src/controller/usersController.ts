@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Users } from "../models/Users";
+import { Users } from "../models";
 
 import { generateToken } from "../config/tokens";
 

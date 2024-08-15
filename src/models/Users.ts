@@ -1,11 +1,10 @@
+import { Model, DataTypes } from "sequelize";
 import bcrypt from "bcrypt";
-import Sequelize from "sequelize";
 
 import db from "../db";
-import { Orders } from "./Orders";
-import { PaymentInfo } from "./PaymentInfo";
+import Orders from "./Orders";
 
-class Users extends Sequelize.Model {
+class Users extends Model {
   id: number;
   username: string;
   email: string;
@@ -20,15 +19,15 @@ class Users extends Sequelize.Model {
 Users.init(
   {
     is_admin: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
     username: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     email: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
@@ -36,24 +35,24 @@ Users.init(
       },
     },
     checkoutId: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
     },
     password: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     salt: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
     createdAt: {
       allowNull: false,
       defaultValue: new Date(),
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
     updatedAt: {
       allowNull: false,
       defaultValue: new Date(),
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
   },
   {
@@ -80,7 +79,5 @@ Users.prototype.validatePassword = function (password: string) {
     .hash(password, this.salt)
     .then((hash: string) => hash === this.password);
 };
-Users.belongsTo(PaymentInfo);
-Users.belongsToMany(Orders, { through: "orderhistory" });
 
-export { Users };
+export default Users;

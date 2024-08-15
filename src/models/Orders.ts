@@ -1,12 +1,9 @@
-import { Deliverys } from "./Deliverys";
-import { Payments } from "./Payments";
-import { Users } from "./Users";
-
-import Sequelize from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import db from "../db";
 import { Delivery } from "../interfaces/Delivery";
+import Users from "./Users";
 
-class Orders extends Sequelize.Model {
+class Orders extends Model {
   id: number;
   status: string;
   delivery: Delivery;
@@ -16,17 +13,13 @@ class Orders extends Sequelize.Model {
 Orders.init(
   {
     total_value: {
-      type: Sequelize.FLOAT,
+      type: DataTypes.FLOAT,
     },
     status: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
     },
   },
   { sequelize: db, modelName: "orders" }
 );
 
-Orders.belongsTo(Payments);
-Orders.belongsTo(Deliverys);
-Orders.belongsToMany(Users, { through: "orderhistory" });
-
-export { Orders };
+export default Orders;
