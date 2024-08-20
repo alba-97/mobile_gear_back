@@ -11,7 +11,7 @@ export const generateToken = (payload: User) => {
     expiresIn: "2h",
   });
 
-  return token;
+  return token ?? "";
 };
 
 export const validateToken = (token: string) => {
