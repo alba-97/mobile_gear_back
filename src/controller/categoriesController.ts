@@ -1,10 +1,10 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Categories, Products } from "../models";
+import categoriesService from "../services/categoriesService";
 
 export const listCategories = async (_: CustomRequest, res: Response) => {
   try {
-    const categories = await Categories.findAll();
+    const categories = await categoriesService.listCategories();
     res.send(categories);
   } catch (err) {
     res.status(404).send(err);
@@ -13,16 +13,12 @@ export const listCategories = async (_: CustomRequest, res: Response) => {
 
 export const addCategory = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin) {
-      const name = req.body.name.toLowerCase();
-      const data = await Categories.findOrCreate({ where: { name } });
-      if (data[1]) {
-        res.send(data[0]);
-      } else {
-        res.status(409).send({ message: "Dato existente" });
-      }
+    const name = req.body.name.toLowerCase();
+    const data = await categoriesService.addCategory(name);
+    if (data[1]) {
+      res.send(data[0]);
     } else {
-      res.status(403).send({ message: "Acceso denegado" });
+      res.sendStatus(409);
     }
   } catch (err) {
     res.status(404).send(err);
@@ -31,18 +27,9 @@ export const addCategory = async (req: CustomRequest, res: Response) => {
 
 export const editCategory = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin) {
-      const name = req.body.name.toLowerCase();
-      await Categories.update(
-        { name },
-        {
-          where: { id: Number(req.params.id) },
-        }
-      );
-      res.sendStatus(200);
-    } else {
-      res.status(403).send({ message: "Acceso denegado" });
-    }
+    const name = req.body.name.toLowerCase();
+    await categoriesService.editCategory(Number(req.params.id), name);
+    res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -50,20 +37,8 @@ export const editCategory = async (req: CustomRequest, res: Response) => {
 
 export const deleteCategory = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin) {
-      await Products.update(
-        { categoryId: 1 },
-        { where: { categoryId: Number(req.params.id) } }
-      );
-
-      await Categories.destroy({
-        where: { id: Number(req.params.id) },
-      });
-
-      res.sendStatus(200);
-    } else {
-      res.status(403).send({ message: "Acceso denegado" });
-    }
+    await categoriesService.deleteCategory(Number(req.params.id));
+    res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
   }

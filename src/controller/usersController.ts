@@ -1,36 +1,20 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import { Users } from "../models";
-
-import { generateToken } from "../config/tokens";
+import usersService from "../services/usersService";
 
 export const login = async (req: CustomRequest, res: Response) => {
   try {
     const { email, password } = req.body;
-    const user = await Users.findOne({
-      where: { email },
-    });
-    if (!user) return res.sendStatus(401);
-    const isValid = await user.validatePassword(password);
-    if (!isValid) return res.sendStatus(401);
-
-    const payload = {
-      id: user.id,
-      email: user.email,
-      password: user.password,
-      is_admin: user.is_admin,
-    };
-
-    const token = generateToken(payload);
-    res.send({ user, token });
+    const result = await usersService.login(email, password);
+    res.send(result);
   } catch (err) {
-    res.status(404).send(err);
+    res.status(401).send(err);
   }
 };
 
 export const signup = async (req: CustomRequest, res: Response) => {
   try {
-    await Users.create(req.body);
+    await usersService.signup(req.body);
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
@@ -42,23 +26,14 @@ export const logout = (_: CustomRequest, res: Response) => {
 };
 
 export const me = async (req: CustomRequest, res: Response) => {
-  const user = await Users.findOne({
-    where: { id: Number(req.user?.id) },
-    attributes: { exclude: ["password", "salt"] },
-  });
+  const user = await usersService.getUserById(Number(req.user?.id));
   res.send(user);
 };
 
 export const listUsers = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin) {
-      const users = await Users.findAll({
-        attributes: { exclude: ["password", "salt"] },
-      });
-      res.send(users);
-    } else {
-      res.status(403).json({ mensaje: "Acceso denegado" });
-    }
+    const users = await usersService.listUsers();
+    res.send(users);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -66,16 +41,8 @@ export const listUsers = async (req: CustomRequest, res: Response) => {
 
 export const switchPrivileges = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin && Number(req.params.id) != req.user.id) {
-      const user = await Users.findByPk(Number(req.params.id));
-      await Users.update(
-        { is_admin: !user?.is_admin },
-        { where: { id: user?.id } }
-      );
-      res.sendStatus(200);
-    } else {
-      res.status(403).json({ mensaje: "Acceso denegado" });
-    }
+    await usersService.switchPrivileges(Number(req.params.id));
+    res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -83,12 +50,8 @@ export const switchPrivileges = async (req: CustomRequest, res: Response) => {
 
 export const removeUser = async (req: CustomRequest, res: Response) => {
   try {
-    if (req.user?.is_admin) {
-      await Users.destroy({ where: { id: Number(req.params.id) } });
-      res.sendStatus(200);
-    } else {
-      res.status(403).json({ mensaje: "Acceso denegado" });
-    }
+    await usersService.removeUser(Number(req.params.id));
+    res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
   }

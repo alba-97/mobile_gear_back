@@ -8,33 +8,37 @@ dotenv.config();
 import transporter from "../mailTransporter";
 import { Deliverys, Orders, Products, Users } from "../models";
 import ProductOrders from "../models/ProductOrders";
+import usersService from "../services/usersService";
+import productOrdersService from "../services/productOrdersService";
+import ordersService from "../services/ordersService";
 
 export const confirmPurchase = async (req: CustomRequest, res: Response) => {
   try {
-    const user = await Users.findByPk(req.user?.id);
-    const order = await Orders.findByPk(user?.checkoutId, {
-      include: Deliverys,
-    });
+    const user = await usersService.getUserById(req.user?.id);
+    const order = await ordersService.getOrderById(user?.checkoutId);
     if (order?.status == "checkout") {
-      Orders.update({ status: "purchased" }, { where: { id: order.id } });
+      productOrdersService.updateOrder(
+        { status: "purchased" },
+        { where: { id: order.id } }
+      );
       user?.setOrders(order);
-      const productorders = await ProductOrders.findAll({
-        where: { orderId: user?.checkoutId },
-        include: [Products],
+      const productorders = await productOrdersService.getProductOrders({
+        orderId: user?.checkoutId,
       });
+
       const products = productorders
         .map((item: ProductOrder) => item.product.name)
         .join(", ");
       let eta = order.delivery.eta;
 
       const days = [
-        "domingo",
-        "lunes",
-        "martes",
-        "miércoles",
-        "jueves",
-        "viernes",
-        "sábado",
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
       ];
 
       const etaDay = new Date(
@@ -42,9 +46,8 @@ export const confirmPurchase = async (req: CustomRequest, res: Response) => {
       );
 
       const to = user?.email;
-      const subject = "¡Gracias por tu compra!";
-
-      const text = `Compraste ${products}\n\nLlega el ${etaDay}`;
+      const subject = "Thanks for your purchase!";
+      const text = `You bought ${products}\n\nIt arrives ${etaDay}`;
 
       const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -65,8 +68,7 @@ export const confirmPurchase = async (req: CustomRequest, res: Response) => {
 
 export const addToCheckout = async (req: CustomRequest, res: Response) => {
   try {
-    const user = await Users.findByPk(req.user?.id);
-
+    const user = await usersService.getUserById(req.user?.id);
     const delivery = await Deliverys.create();
     const order = await Orders.create({
       status: "checkout",
@@ -84,9 +86,9 @@ export const addToCheckout = async (req: CustomRequest, res: Response) => {
       });
     }
 
-    await Users.update({ checkoutId: order.id }, { where: { id: user?.id } });
+    await usersService.updateUser({ checkoutId: order.id }, { id: user?.id });
 
-    res.status(201).send({ message: "Orden agregada" });
+    res.sendStatus(201);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -118,9 +120,8 @@ export const purchaseHistory = async (req: CustomRequest, res: Response) => {
   try {
     const user = await Users.findByPk(req.user?.id, { include: Orders });
     if (user) {
-      const orders = await ProductOrders.findAll({
-        where: { userId: user.id },
-        include: [Products, Orders],
+      const orders = await productOrdersService.getProductOrders({
+        userId: user.id,
       });
       res.send(orders);
     } else {
@@ -133,15 +134,9 @@ export const purchaseHistory = async (req: CustomRequest, res: Response) => {
 
 export const listAllOrders = async (req: CustomRequest, res: Response) => {
   if (req.user?.is_admin) {
-    const productOrders = await ProductOrders.findAll({
-      include: [
-        { model: Users, attributes: { exclude: ["password", "salt"] } },
-        Products,
-        Orders,
-      ],
-    });
+    const productOrders = await productOrdersService.getProductOrders();
     res.send(productOrders);
   } else {
-    res.status(403).send({ message: "Acceso denegado" });
+    res.sendStatus(403);
   }
 };
