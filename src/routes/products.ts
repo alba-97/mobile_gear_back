@@ -6,7 +6,7 @@ import {
   editProduct,
   getProduct,
   listProducts,
-} from "../controller/productsController";
+} from "../controller/product.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 

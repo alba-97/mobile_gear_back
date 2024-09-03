@@ -5,7 +5,7 @@ import {
   deleteCategory,
   editCategory,
   listCategories,
-} from "../controller/categoriesController";
+} from "../controller/category.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 

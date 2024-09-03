@@ -1,11 +1,12 @@
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import usersService from "../services/usersService";
+import userService from "../services/user.service";
+import authService from "../services/auth.service";
 
 export const login = async (req: CustomRequest, res: Response) => {
   try {
     const { email, password } = req.body;
-    const result = await usersService.login(email, password);
+    const result = await authService.login(email, password);
     res.send(result);
   } catch (err) {
     res.status(401).send(err);
@@ -14,7 +15,7 @@ export const login = async (req: CustomRequest, res: Response) => {
 
 export const signup = async (req: CustomRequest, res: Response) => {
   try {
-    await usersService.signup(req.body);
+    await userService.createUser(req.body);
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
@@ -26,13 +27,13 @@ export const logout = (_: CustomRequest, res: Response) => {
 };
 
 export const me = async (req: CustomRequest, res: Response) => {
-  const user = await usersService.getUserById(Number(req.user?.id));
+  const user = await userService.getUserById(Number(req.user?.id));
   res.send(user);
 };
 
 export const listUsers = async (req: CustomRequest, res: Response) => {
   try {
-    const users = await usersService.listUsers();
+    const users = await userService.listUsers();
     res.send(users);
   } catch (err) {
     res.status(404).send(err);
@@ -41,7 +42,7 @@ export const listUsers = async (req: CustomRequest, res: Response) => {
 
 export const switchPrivileges = async (req: CustomRequest, res: Response) => {
   try {
-    await usersService.switchPrivileges(Number(req.params.id));
+    await userService.switchPrivileges(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
@@ -50,7 +51,7 @@ export const switchPrivileges = async (req: CustomRequest, res: Response) => {
 
 export const removeUser = async (req: CustomRequest, res: Response) => {
   try {
-    await usersService.removeUser(Number(req.params.id));
+    await userService.removeUser(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);

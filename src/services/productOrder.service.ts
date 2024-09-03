@@ -12,11 +12,16 @@ const getProductOrders = async (where?: any) => {
   });
 };
 
+const createOrder = async (data: any) => {
+  return await ProductOrders.create(data);
+};
+
 const updateOrder = async (data: any, where?: any) => {
   return await ProductOrders.update(data, { where });
 };
 
 export default {
   getProductOrders,
+  createOrder,
   updateOrder,
 };

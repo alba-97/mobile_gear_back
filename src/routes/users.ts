@@ -8,7 +8,7 @@ import {
   removeUser,
   signup,
   switchPrivileges,
-} from "../controller/usersController";
+} from "../controller/user.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 

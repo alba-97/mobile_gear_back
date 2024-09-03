@@ -1,12 +1,10 @@
-// src/controllers/productController.ts
-
 import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
-import productsService from "../services/productsService";
+import productService from "../services/product.service";
 
 export const listProducts = async (_: CustomRequest, res: Response) => {
   try {
-    const data = await productsService.listProducts();
+    const data = await productService.listProducts();
     res.status(200).send(data);
   } catch (err) {
     res.status(404).send(err);
@@ -15,7 +13,7 @@ export const listProducts = async (_: CustomRequest, res: Response) => {
 
 export const discountedProducts = async (_: CustomRequest, res: Response) => {
   try {
-    const data = await productsService.discountedProducts();
+    const data = await productService.discountedProducts();
     res.send(data);
   } catch (err) {
     res.status(404).send(err);
@@ -24,7 +22,7 @@ export const discountedProducts = async (_: CustomRequest, res: Response) => {
 
 export const getProduct = async (req: CustomRequest, res: Response) => {
   try {
-    const data = await productsService.getProduct(Number(req.params.id));
+    const data = await productService.getProduct(Number(req.params.id));
     res.send(data);
   } catch (err) {
     res.status(404).send(err);
@@ -33,7 +31,7 @@ export const getProduct = async (req: CustomRequest, res: Response) => {
 
 export const editProduct = async (req: CustomRequest, res: Response) => {
   try {
-    await productsService.editProduct(Number(req.params.id), req.body);
+    await productService.editProduct(Number(req.params.id), req.body);
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
@@ -42,7 +40,7 @@ export const editProduct = async (req: CustomRequest, res: Response) => {
 
 export const addProduct = async (req: CustomRequest, res: Response) => {
   try {
-    const data = await productsService.addProduct(req.body);
+    const data = await productService.addProduct(req.body);
     res.send(data);
   } catch (err) {
     res.status(404).send(err);
@@ -51,7 +49,7 @@ export const addProduct = async (req: CustomRequest, res: Response) => {
 
 export const deleteProduct = async (req: CustomRequest, res: Response) => {
   try {
-    await productsService.deleteProduct(Number(req.params.id));
+    await productService.deleteProduct(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);

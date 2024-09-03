@@ -6,4 +6,8 @@ const getOrderById = async (id?: number) => {
   });
 };
 
-export default { getOrderById };
+const createOrder = async (data: any) => {
+  return await Orders.create(data);
+};
+
+export default { getOrderById, createOrder };

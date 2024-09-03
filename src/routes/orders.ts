@@ -6,7 +6,7 @@ import {
   listAllOrders,
   listCheckout,
   purchaseHistory,
-} from "../controller/ordersController";
+} from "../controller/order.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 
