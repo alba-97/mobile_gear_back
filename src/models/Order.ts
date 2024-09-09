@@ -1,16 +1,16 @@
 import { Model, DataTypes } from "sequelize";
 import db from "../db";
 import { Delivery } from "../interfaces/Delivery";
-import Users from "./Users";
+import User from "./User";
 
-class Orders extends Model {
+class Order extends Model {
   id: number;
   status: string;
   delivery: Delivery;
-  setUsers: (user: Users | null) => void;
+  setUsers: (user: User | null) => void;
 }
 
-Orders.init(
+Order.init(
   {
     total_value: {
       type: DataTypes.FLOAT,
@@ -22,4 +22,4 @@ Orders.init(
   { sequelize: db, modelName: "orders" }
 );
 
-export default Orders;
+export default Order;

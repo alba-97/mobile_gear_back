@@ -2,7 +2,7 @@ import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
 import productService from "../services/product.service";
 
-export const listProducts = async (_: CustomRequest, res: Response) => {
+export const listProducts = async (req: CustomRequest, res: Response) => {
   try {
     const data = await productService.listProducts();
     res.status(200).send(data);

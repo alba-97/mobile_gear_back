@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import userService from "../services/user.service";
-import productOrderService from "../services/productOrder.service";
+import productOrderService from "../services/product-order.service";
 import orderService from "../services/order.service";
 import deliveryService from "../services/delivery.service";
 import emailService from "../services/email.service";

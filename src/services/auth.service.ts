@@ -1,9 +1,9 @@
 import { generateToken } from "../config/tokens";
-import { Users } from "../models";
+import { User } from "../models";
 
 const login = async (email: string, password: string) => {
-  const user = await Users.findOne({ where: { email } });
-  if (!user) throw new Error("Users doesn't exist");
+  const user = await User.findOne({ where: { email } });
+  if (!user) throw new Error("User doesn't exist");
 
   const isValid = await user.validatePassword(password);
   if (!isValid) throw new Error("Unauthorized");

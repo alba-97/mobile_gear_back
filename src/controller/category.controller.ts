@@ -2,7 +2,8 @@ import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
 import categoryService from "../services/category.service";
 
-export const listCategories = async (_: CustomRequest, res: Response) => {
+export const listCategories = async (req: CustomRequest, res: Response) => {
+  console.log(req.query);
   try {
     const categories = await categoryService.listCategories();
     res.send(categories);
@@ -28,7 +29,7 @@ export const addCategory = async (req: CustomRequest, res: Response) => {
 export const editCategory = async (req: CustomRequest, res: Response) => {
   try {
     const name = req.body.name.toLowerCase();
-    await categoryService.editCategory(Number(req.params.id), name);
+    await categoryService.editCategory(+req.params.id, name);
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);
@@ -37,7 +38,7 @@ export const editCategory = async (req: CustomRequest, res: Response) => {
 
 export const deleteCategory = async (req: CustomRequest, res: Response) => {
   try {
-    await categoryService.deleteCategory(Number(req.params.id));
+    await categoryService.deleteCategory(+req.params.id);
     res.sendStatus(200);
   } catch (err) {
     res.status(404).send(err);

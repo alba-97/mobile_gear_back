@@ -2,9 +2,9 @@ import { Model, DataTypes } from "sequelize";
 import bcrypt from "bcrypt";
 
 import db from "../db";
-import Orders from "./Orders";
+import Order from "./Order";
 
-class Users extends Model {
+class User extends Model {
   id: number;
   username: string;
   email: string;
@@ -14,9 +14,9 @@ class Users extends Model {
   checkoutId: number;
   hash: (plainPassword: string, salt: string) => Promise<string>;
   validatePassword: (password: string) => Promise<boolean>;
-  setOrders: (order: Orders) => void;
+  setOrders: (order: Order) => void;
 }
-Users.init(
+User.init(
   {
     is_admin: {
       type: DataTypes.BOOLEAN,
@@ -61,7 +61,7 @@ Users.init(
   }
 );
 
-Users.beforeCreate((user: Users) => {
+User.beforeCreate((user: User) => {
   const salt = bcrypt.genSaltSync(8);
   user.salt = salt;
 
@@ -70,14 +70,14 @@ Users.beforeCreate((user: Users) => {
   });
 });
 
-Users.prototype.hash = function (plainPassword: string, salt: string) {
+User.prototype.hash = function (plainPassword: string, salt: string) {
   return bcrypt.hash(plainPassword, salt);
 };
 
-Users.prototype.validatePassword = function (password: string) {
+User.prototype.validatePassword = function (password: string) {
   return bcrypt
     .hash(password, this.salt)
     .then((hash: string) => hash === this.password);
 };
 
-export default Users;
+export default User;

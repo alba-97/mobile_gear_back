@@ -1,25 +1,25 @@
-import Brands from "./Brands";
-import Categories from "./Categories";
-import Deliverys from "./Deliverys";
-import Orders from "./Orders";
+import Brand from "./Brand";
+import Category from "./Category";
+import Deliverys from "./Delivery";
+import Order from "./Order";
 import PaymentInfo from "./PaymentInfo";
-import Payments from "./Payments";
-import ProductOrders from "./ProductOrders";
-import Products from "./Products";
-import Users from "./Users";
+import Payments from "./Payment";
+import ProductOrder from "./ProductOrder";
+import Product from "./Product";
+import User from "./User";
 
-Users.belongsTo(PaymentInfo);
-Users.belongsToMany(Orders, { through: "orderhistory" });
+User.belongsTo(PaymentInfo);
+User.belongsToMany(Order, { through: "orderhistory" });
 
-ProductOrders.belongsTo(Products);
-ProductOrders.belongsTo(Users);
-ProductOrders.belongsTo(Orders);
+ProductOrder.belongsTo(Product);
+ProductOrder.belongsTo(User);
+ProductOrder.belongsTo(Order);
 
-Orders.belongsTo(Payments);
-Orders.belongsTo(Deliverys);
-Orders.belongsToMany(Users, { through: "orderhistory" });
+Order.belongsTo(Payments);
+Order.belongsTo(Deliverys);
+Order.belongsToMany(User, { through: "orderhistory" });
 
-Products.belongsTo(Brands);
-Products.belongsTo(Categories);
+Product.belongsTo(Brand);
+Product.belongsTo(Category);
 
-export { Brands, Categories, Deliverys, Orders, PaymentInfo, Products, Users };
+export { Brand, Category, Deliverys, Order, PaymentInfo, Product, User };

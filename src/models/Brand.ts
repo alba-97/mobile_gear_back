@@ -1,11 +1,11 @@
 import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class Categories extends Model {
+class Brand extends Model {
   id: number;
   name: string;
 }
-Categories.init(
+Brand.init(
   {
     name: {
       type: DataTypes.STRING,
@@ -14,8 +14,8 @@ Categories.init(
   },
   {
     sequelize: db,
-    modelName: "categories",
+    modelName: "brands",
   }
 );
 
-export default Categories;
+export default Brand;

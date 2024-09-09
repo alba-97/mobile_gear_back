@@ -1,37 +1,34 @@
-import { Orders, Users } from "../models";
+import { Order, User } from "../models";
 
 const createUser = async (userData: any) => {
-  await Users.create(userData);
+  await User.create(userData);
 };
 
 const getUserById = async (id?: number) => {
-  return await Users.findOne({
+  return await User.findOne({
     where: { id },
     attributes: { exclude: ["password", "salt"] },
-    include: [Orders],
+    include: [Order],
   });
 };
 
 const listUsers = async () => {
-  return await Users.findAll({
+  return await User.findAll({
     attributes: { exclude: ["password", "salt"] },
   });
 };
 
 const switchPrivileges = async (userId: number) => {
-  const user = await Users.findByPk(userId);
-  await Users.update(
-    { is_admin: !user?.is_admin },
-    { where: { id: user?.id } }
-  );
+  const user = await User.findByPk(userId);
+  await User.update({ is_admin: !user?.is_admin }, { where: { id: user?.id } });
 };
 
 const updateUser = async (data: any, where?: any) => {
-  await Users.update(data, { where });
+  await User.update(data, { where });
 };
 
 const removeUser = async (userId: number) => {
-  await Users.destroy({ where: { id: userId } });
+  await User.destroy({ where: { id: userId } });
 };
 
 export default {

@@ -1,37 +1,37 @@
 import { Op } from "sequelize";
-import { Brands, Categories, Products } from "../models";
+import { Brand, Category, Product } from "../models";
 
 const listProducts = async () => {
-  return await Products.findAll();
+  return await Product.findAll({});
 };
 
 const discountedProducts = async () => {
-  return await Products.findAll({
+  return await Product.findAll({
     where: {
       discount: { [Op.gt]: 15 },
     },
-    include: [Categories, Brands],
+    include: [Brand, Category],
   });
 };
 
 const getProduct = async (id: number) => {
-  return await Products.findByPk(id, {
-    include: [Brands, Categories],
+  return await Product.findByPk(id, {
+    include: [Brand, Category],
   });
 };
 
 const editProduct = async (id: number, productData: any) => {
-  return await Products.update(productData, {
+  return await Product.update(productData, {
     where: { id },
   });
 };
 
 const addProduct = async (productData: any) => {
-  return await Products.create(productData);
+  return await Product.create(productData);
 };
 
 const deleteProduct = async (id: number) => {
-  return await Products.destroy({
+  return await Product.destroy({
     where: { id },
   });
 };
