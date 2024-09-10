@@ -1,8 +1,38 @@
-import { Op } from "sequelize";
+import { IncludeOptions, Op, WhereOptions } from "sequelize";
 import { Brand, Category, Product } from "../models";
 
-const listProducts = async () => {
-  return await Product.findAll({});
+interface IProductQuery {
+  modelName?: string;
+  categoryName?: string;
+  min?: number;
+  max?: number;
+  brandName?: string;
+}
+
+const listProducts = async (query: IProductQuery) => {
+  const { modelName, categoryName, min, max, brandName } = query;
+  const where: WhereOptions<Product> = {};
+  const include: IncludeOptions[] = [{ model: Brand }, { model: Category }];
+
+  if (modelName) where.name = { [Op.iLike]: `%${modelName}%` };
+
+  if (min || max) {
+    if (min && max) where.price = { [Op.between]: [Number(min), Number(max)] };
+    else if (min) where.price = { [Op.gte]: Number(min) };
+    else where.price = { [Op.lte]: Number(max) };
+  }
+
+  if (brandName)
+    include[0].where = {
+      name: { [Op.iLike]: `%${brandName}%` },
+    };
+
+  if (categoryName)
+    include[1].where = {
+      name: { [Op.iLike]: `%${categoryName}%` },
+    };
+
+  return await Product.findAll({ where, include });
 };
 
 const discountedProducts = async () => {

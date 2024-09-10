@@ -4,7 +4,7 @@ import productService from "../services/product.service";
 
 export const listProducts = async (req: CustomRequest, res: Response) => {
   try {
-    const data = await productService.listProducts();
+    const data = await productService.listProducts(req.query);
     res.status(200).send(data);
   } catch (err) {
     res.status(404).send(err);
