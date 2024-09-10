@@ -1,22 +1,15 @@
-import {
-  Brands,
-  Categories,
-  Deliverys,
-  Orders,
-  Products,
-  Users,
-} from "./models";
-import ProductOrders from "./models/ProductOrders";
+import { Brand, Category, Deliverys, Order, Product, User } from "./models";
+import ProductOrder from "./models/ProductOrder";
 import products from "./products.json";
 
 const seeder = async () => {
-  await Categories.create({ name: "default" });
+  await Category.create({ name: "default" });
 
   for (let i = 0; i < products.length; i++) {
     let { name, price, type, brand, product_img, stock, discount } =
       products[i];
-    let _brand = await Brands.findOrCreate({ where: { name: brand } });
-    let category = await Categories.findOrCreate({
+    let _brand = await Brand.findOrCreate({ where: { name: brand } });
+    let category = await Category.findOrCreate({
       where: { name: type },
     });
 
@@ -29,17 +22,17 @@ const seeder = async () => {
       stock,
       discount,
     };
-    await Products.create(product);
+    await Product.create(product);
   }
 
-  await Users.create({
+  await User.create({
     is_admin: true,
     username: "admin",
     email: "mobilegearadmin@protonmail.com",
     password: "1234",
   });
 
-  await Users.create({
+  await User.create({
     is_admin: false,
     username: "user",
     email: "mobilegeartest@protonmail.com",
@@ -55,29 +48,29 @@ const seeder = async () => {
     value: 1499,
   });
 
-  await Orders.create({
+  await Order.create({
     status: "purchased",
     deliveryId: 1,
   });
-  await Orders.create({
+  await Order.create({
     status: "purchased",
     deliveryId: 2,
   });
 
-  await ProductOrders.create({
+  await ProductOrder.create({
     orderId: 1,
     productId: 1,
     userId: 2,
     qty: 2,
   });
-  await ProductOrders.create({
+  await ProductOrder.create({
     orderId: 1,
     productId: 2,
     userId: 2,
     qty: 3,
   });
 
-  await ProductOrders.create({
+  await ProductOrder.create({
     orderId: 2,
     productId: 4,
     userId: 1,

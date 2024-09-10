@@ -22,7 +22,7 @@ app.use(
 );
 app.use(cookieParser());
 
-app.use("/", routes);
+app.use("/api", routes);
 
 const force = false;
 

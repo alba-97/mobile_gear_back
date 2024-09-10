@@ -2,7 +2,7 @@ import { Model, DataTypes } from "sequelize";
 
 import db from "../db";
 
-class Products extends Model {
+class Product extends Model {
   name: string;
   product_img: string;
   description: string;
@@ -11,7 +11,7 @@ class Products extends Model {
   discount: number;
   stock: number;
 }
-Products.init(
+Product.init(
   {
     name: {
       type: DataTypes.STRING,
@@ -50,4 +50,4 @@ Products.init(
   }
 );
 
-export default Products;
+export default Product;

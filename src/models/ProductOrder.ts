@@ -4,14 +4,14 @@ import db from "../db";
 import { Product } from "../interfaces/Product";
 import { Order } from "../interfaces/Order";
 
-class ProductOrders extends Model {
+class ProductOrder extends Model {
   id: number;
   qty: number;
   order: Order;
   product: Product;
 }
 
-ProductOrders.init(
+ProductOrder.init(
   {
     qty: {
       type: DataTypes.INTEGER,
@@ -20,4 +20,4 @@ ProductOrders.init(
   { sequelize: db, modelName: "productorders" }
 );
 
-export default ProductOrders;
+export default ProductOrder;

@@ -5,14 +5,15 @@ import {
   deleteCategory,
   editCategory,
   listCategories,
-} from "../controller/categoriesController";
-import validateUser from "../middleware/auth";
+} from "../controller/category.controller";
+import validateUser from "../middleware/validateUser";
+import validateAdmin from "../middleware/validateAdmin";
 
 const router = express.Router();
 
 router.get("/", listCategories);
-router.post("/", validateUser, addCategory);
-router.put("/:id", validateUser, editCategory);
-router.delete("/:id", validateUser, deleteCategory);
+router.post("/", validateUser, validateAdmin, addCategory);
+router.put("/:id", validateUser, validateAdmin, editCategory);
+router.delete("/:id", validateUser, validateAdmin, deleteCategory);
 
 export default router;
