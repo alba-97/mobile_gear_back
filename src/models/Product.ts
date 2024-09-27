@@ -37,6 +37,7 @@ Product.init(
 
     discount: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
 
     stock: {

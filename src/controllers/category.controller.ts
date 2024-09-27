@@ -2,8 +2,7 @@ import { Response } from "express";
 import { CustomRequest } from "../interfaces/CustomRequest";
 import categoryService from "../services/category.service";
 
-export const listCategories = async (req: CustomRequest, res: Response) => {
-  console.log(req.query);
+export const listCategories = async (_: CustomRequest, res: Response) => {
   try {
     const categories = await categoryService.listCategories();
     res.send(categories);

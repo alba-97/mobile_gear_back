@@ -16,6 +16,7 @@ const login = async (email: string, password: string) => {
   };
 
   const token = generateToken(payload);
+
   return { user, token };
 };
 
