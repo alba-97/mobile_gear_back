@@ -1,20 +1,20 @@
 import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class Deliverys extends Model {
+class Delivery extends Model {
   id: number;
   eta: Date;
   type: string;
   value: number;
 }
 
-Deliverys.init(
+Delivery.init(
   {
     type: { type: DataTypes.STRING },
     value: { type: DataTypes.FLOAT },
     eta: { type: DataTypes.DATE, defaultValue: new Date() },
   },
-  { sequelize: db, modelName: "deliverys" }
+  { sequelize: db, modelName: "deliveries" }
 );
 
-export default Deliverys;
+export default Delivery;

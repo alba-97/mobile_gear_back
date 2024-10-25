@@ -1,6 +1,7 @@
 import { IncludeOptions, Op, WhereOptions } from "sequelize";
 import { Brand, Category, Product } from "../models";
 import { IProductQuery } from "../interfaces/Product";
+import { ProductDto } from "../dto/product.dto";
 
 const findAll = async (query: IProductQuery) => {
   const {
@@ -20,23 +21,26 @@ const findAll = async (query: IProductQuery) => {
   switch (true) {
     case !!minDiscount && !!maxDiscount:
       where.discount = {
-        [Op.between]: [Number(minDiscount), Number(maxDiscount)],
+        [Op.between]: [minDiscount, maxDiscount],
       };
+      break;
     case !!minDiscount:
-      where.discount = { [Op.gte]: Number(minDiscount) };
+      where.discount = { [Op.gte]: minDiscount };
+      break;
     case !!maxDiscount:
-      where.discount = { [Op.lte]: Number(maxDiscount) };
+      where.discount = { [Op.lte]: maxDiscount };
+      break;
   }
 
   switch (true) {
     case !!minPrice && !!maxPrice:
-      where.price = { [Op.between]: [Number(minPrice), Number(maxPrice)] };
+      where.price = { [Op.between]: [minPrice, maxPrice] };
       break;
     case !!minPrice:
-      where.price = { [Op.gte]: Number(minPrice) };
+      where.price = { [Op.gte]: minPrice };
       break;
     case !!maxPrice:
-      where.price = { [Op.lte]: Number(maxPrice) };
+      where.price = { [Op.lte]: maxPrice };
       break;
   }
 
@@ -50,7 +54,9 @@ const findAll = async (query: IProductQuery) => {
       name: { [Op.iLike]: `%${categoryName}%` },
     };
 
-  return await Product.findAll({ where, include });
+  const products = await Product.findAll({ where, include });
+
+  return products;
 };
 
 const getOneById = async (id: number) => {
@@ -59,13 +65,13 @@ const getOneById = async (id: number) => {
   });
 };
 
-const updateOneById = async (id: number, data: any) => {
+const updateOneById = async (id: number, data: ProductDto) => {
   return await Product.update(data, {
     where: { id },
   });
 };
 
-const createOne = async (data: any) => {
+const createOne = async (data: ProductDto) => {
   return await Product.create(data);
 };
 

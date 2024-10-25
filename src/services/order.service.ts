@@ -1,12 +1,13 @@
-import { Deliverys, Order } from "../models";
+import { OrderDto } from "../dto/order.dto";
+import { Delivery, Order } from "../models";
 
 const getOrderById = async (id?: number) => {
   return await Order.findByPk(id, {
-    include: Deliverys,
+    include: Delivery,
   });
 };
 
-const createOrder = async (data: any) => {
+const createOrder = async (data: OrderDto) => {
   return await Order.create(data);
 };
 

@@ -1,3 +1,4 @@
+import { ProductDto } from "../dto/product.dto";
 import { IProductQuery } from "../interfaces/Product";
 import productRepository from "../repositories/product.repository";
 
@@ -15,11 +16,11 @@ const getProduct = async (id: number) => {
   return await productRepository.getOneById(id);
 };
 
-const editProduct = async (id: number, data: any) => {
+const editProduct = async (id: number, data: ProductDto) => {
   return await productRepository.updateOneById(id, data);
 };
 
-const addProduct = async (data: any) => {
+const addProduct = async (data: ProductDto) => {
   return await productRepository.createOne(data);
 };
 

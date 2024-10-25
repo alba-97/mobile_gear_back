@@ -16,19 +16,19 @@ export const confirmPurchase = async (req: CustomRequest, res: Response) => {
     const user = await userService.getUserById(req.user?.id);
     const order = await orderService.getOrderById(user?.checkoutId);
     if (order?.status == "checkout") {
-      productOrderService.updateOrder(
-        { status: "purchased" },
-        { where: { id: order.id } }
-      );
+      if (!req.user?.id) return;
+      productOrderService.updateProductOrder(req.user.id, {
+        status: "purchased",
+      });
       user?.setOrders(order);
       const productorders = await productOrderService.getProductOrders({
         orderId: user?.checkoutId,
       });
 
       const products = productorders
-        .map((item: ProductOrder) => item.product.name)
+        .map((item: ProductOrder) => item.product?.name)
         .join(", ");
-      let eta = order.delivery.eta;
+      let eta = order.delivery?.eta;
 
       await emailService.sendPurchaseEmail(products, eta, user?.email);
 
@@ -44,41 +44,45 @@ export const confirmPurchase = async (req: CustomRequest, res: Response) => {
 export const addToCheckout = async (req: CustomRequest, res: Response) => {
   try {
     const user = await userService.getUserById(req.user?.id);
-    const delivery = await deliveryService.createDelivery();
+    if (!user) return;
+    const delivery = await deliveryService.createDelivery(req.body);
     const order = await orderService.createOrder({
       status: "checkout",
-      deliveryId: delivery.id,
+      delivery: delivery,
     });
+    if (!order.id) return;
     order.setUsers(user);
 
     const { data } = req.body;
     for (let i = 0; i < data.length; i++) {
-      await productOrderService.createOrder({
+      await productOrderService.createProductOrder({
         orderId: order.id,
         productId: data[i].id,
         userId: user?.id,
         qty: data[i].quantity,
+        status: "checkout",
       });
     }
 
-    await userService.updateUser({ checkoutId: order.id }, { id: user?.id });
+    await userService.updateUser(user?.id, { checkoutId: order.id });
 
     res.sendStatus(201);
   } catch (err) {
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 };
 
 export const listCheckout = async (req: CustomRequest, res: Response) => {
   try {
-    const user = await userService.getUserById(req.user?.id);
+    if (!req.user?.id) return;
+    const user = await userService.getUserById(req.user.id);
     if (user && user.checkoutId) {
       const productOrders = await productOrderService.getProductOrders({
         orderId: user.checkoutId,
       });
       const total = productOrders.reduce(
         (acc: number, item: ProductOrder) =>
-          acc + item.product.price * item.qty,
+          acc + (item.product?.price ?? 0) * item.qty,
         0
       );
       res.send({ data: productOrders, total });
@@ -86,13 +90,14 @@ export const listCheckout = async (req: CustomRequest, res: Response) => {
       res.sendStatus(401);
     }
   } catch (err) {
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 };
 
 export const purchaseHistory = async (req: CustomRequest, res: Response) => {
   try {
-    const user = await userService.getUserById(req.user?.id);
+    if (!req.user?.id) return;
+    const user = await userService.getUserById(req.user.id);
     if (user) {
       const orders = await productOrderService.getProductOrders({
         userId: user.id,
@@ -102,15 +107,11 @@ export const purchaseHistory = async (req: CustomRequest, res: Response) => {
       res.sendStatus(401);
     }
   } catch (err) {
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 };
 
 export const listAllOrders = async (req: CustomRequest, res: Response) => {
-  if (req.user?.is_admin) {
-    const productOrders = await productOrderService.getProductOrders();
-    res.send(productOrders);
-  } else {
-    res.sendStatus(403);
-  }
+  const productOrders = await productOrderService.getProductOrders({});
+  res.send(productOrders);
 };

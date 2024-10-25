@@ -2,7 +2,7 @@ import transporter from "../mailTransporter";
 
 const sendPurchaseEmail = async (
   products: string,
-  eta: Date,
+  eta?: Date,
   email?: string
 ) => {
   const to = email;

@@ -1,4 +1,4 @@
-import { Brand, Category, Deliverys, Order, Product, User } from "./models";
+import { Brand, Category, Delivery, Order, Product, User } from "./models";
 import ProductOrder from "./models/ProductOrder";
 import products from "./products.json";
 
@@ -39,11 +39,11 @@ const seeder = async () => {
     password: "1234",
   });
 
-  await Deliverys.create({
+  await Delivery.create({
     type: "envio a domicilio",
     value: 1799,
   });
-  await Deliverys.create({
+  await Delivery.create({
     type: "retirar por correo",
     value: 1499,
   });

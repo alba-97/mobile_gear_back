@@ -1,34 +1,37 @@
-import { Order, User } from "../models";
+import { UserDto } from "../dto/user.dto";
+import userRepository from "../repositories/user.repository";
 
-const createUser = async (userData: any) => {
-  await User.create(userData);
+const createUser = async (data: UserDto) => {
+  return await userRepository.createOne(data);
 };
 
 const getUserById = async (id?: number) => {
-  return await User.findOne({
-    where: { id },
-    attributes: { exclude: ["password", "salt"] },
-    include: [Order],
-  });
+  if (!id) return;
+  return await userRepository.getOneById(id);
 };
 
 const listUsers = async () => {
-  return await User.findAll({
-    attributes: { exclude: ["password", "salt"] },
+  return await userRepository.findAll({});
+};
+
+const switchPrivileges = async (id: number) => {
+  const user = await userRepository.getOneById(id);
+  if (!user) return;
+
+  const { is_admin, ...rest } = user;
+
+  return await userRepository.updateOneById(id, {
+    ...rest,
+    is_admin: !is_admin,
   });
 };
 
-const switchPrivileges = async (userId: number) => {
-  const user = await User.findByPk(userId);
-  await User.update({ is_admin: !user?.is_admin }, { where: { id: user?.id } });
+const updateUser = async (id: number, data: Partial<UserDto>) => {
+  return await userRepository.updateOneById(id, data);
 };
 
-const updateUser = async (data: any, where?: any) => {
-  await User.update(data, { where });
-};
-
-const removeUser = async (userId: number) => {
-  await User.destroy({ where: { id: userId } });
+const removeUser = async (id: number) => {
+  return await userRepository.deleteOneById(id);
 };
 
 export default {

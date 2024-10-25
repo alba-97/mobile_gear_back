@@ -1,27 +1,29 @@
-import { Order, Product, User } from "../models";
-import ProductOrder from "../models/ProductOrder";
+import { ProductOrderDto } from "../dto/product-order.dto";
+import productOrderRepository from "../repositories/product-order.repository";
+import { IProductOrderQuery } from "../interfaces/ProductOrder";
 
-const getProductOrders = async (where?: any) => {
-  return await ProductOrder.findAll({
-    where,
-    include: [
-      { model: User, attributes: { exclude: ["password", "salt"] } },
-      Product,
-      Order,
-    ],
-  });
+const getProductOrders = async (where: IProductOrderQuery) => {
+  return await productOrderRepository.findAll(where);
 };
 
-const createOrder = async (data: any) => {
-  return await ProductOrder.create(data);
+const createProductOrder = async (data: ProductOrderDto) => {
+  return await productOrderRepository.create(data);
 };
 
-const updateOrder = async (data: any, where?: any) => {
-  return await ProductOrder.update(data, { where });
+const updateProductOrder = async (
+  id: number,
+  data: Partial<ProductOrderDto>
+) => {
+  return await productOrderRepository.updateOneById(id, data);
+};
+
+const deleteProductOrder = async (id: number) => {
+  return await productOrderRepository.deleteOneById(id);
 };
 
 export default {
   getProductOrders,
-  createOrder,
-  updateOrder,
+  createProductOrder,
+  updateProductOrder,
+  deleteProductOrder,
 };

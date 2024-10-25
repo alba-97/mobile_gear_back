@@ -9,7 +9,13 @@ export const login = async (req: CustomRequest, res: Response) => {
     const result = await authService.login(email, password);
     res.send(result);
   } catch (err) {
-    res.status(401).send(err);
+    if (err instanceof Error) {
+      if (err.message === "Unauthorized") {
+        res.status(401).send({ message: "Invalid email or password" });
+      } else {
+        res.status(500).send({ message: "Internal server error" });
+      }
+    }
   }
 };
 
@@ -18,7 +24,7 @@ export const signup = async (req: CustomRequest, res: Response) => {
     await userService.createUser(req.body);
     res.sendStatus(200);
   } catch (err) {
-    res.status(404).send(err);
+    res.status(500).send(err);
   }
 };
 

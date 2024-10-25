@@ -1,6 +1,6 @@
 import Brand from "./Brand";
 import Category from "./Category";
-import Deliverys from "./Delivery";
+import Delivery from "./Delivery";
 import Order from "./Order";
 import PaymentInfo from "./PaymentInfo";
 import Payments from "./Payment";
@@ -16,10 +16,19 @@ ProductOrder.belongsTo(User);
 ProductOrder.belongsTo(Order);
 
 Order.belongsTo(Payments);
-Order.belongsTo(Deliverys);
+Order.belongsTo(Delivery);
 Order.belongsToMany(User, { through: "orderhistory" });
 
 Product.belongsTo(Brand);
 Product.belongsTo(Category);
 
-export { Brand, Category, Deliverys, Order, PaymentInfo, Product, User };
+export {
+  Brand,
+  Category,
+  Delivery,
+  Order,
+  PaymentInfo,
+  Product,
+  User,
+  ProductOrder,
+};

@@ -1,20 +1,26 @@
 import { Model, DataTypes } from "sequelize";
 
 import db from "../db";
-import { Product } from "../interfaces/Product";
 import { Order } from "../interfaces/Order";
+import { Product } from "../interfaces/Product";
 
 class ProductOrder extends Model {
-  id: number;
   qty: number;
-  order: Order;
-  product: Product;
+  orderId: number;
+  order?: Order;
+  productId: number;
+  product?: Product;
+  userId: number;
+  status: string;
 }
 
 ProductOrder.init(
   {
     qty: {
       type: DataTypes.INTEGER,
+    },
+    status: {
+      type: DataTypes.STRING,
     },
   },
   { sequelize: db, modelName: "productorders" }
