@@ -5,5 +5,5 @@ export interface IUserQuery {
   first_name?: string;
   last_name?: string;
   birth_date?: string;
-  dni?: number;
+  idNumber?: number;
 }

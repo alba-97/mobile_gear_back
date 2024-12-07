@@ -4,8 +4,15 @@ import { Op } from "sequelize";
 import { IUserQuery } from "../interfaces/User";
 
 const findAll = async (query: IUserQuery) => {
-  const { is_admin, username, email, first_name, last_name, birth_date, dni } =
-    query;
+  const {
+    is_admin,
+    username,
+    email,
+    first_name,
+    last_name,
+    birth_date,
+    idNumber,
+  } = query;
   const where: WhereOptions<User> = {};
   const include: IncludeOptions[] = [{ model: PaymentInfo }];
 
@@ -31,9 +38,9 @@ const findAll = async (query: IUserQuery) => {
       ...include[0].where,
     };
 
-  if (dni)
+  if (idNumber)
     include[0].where = {
-      dni,
+      idNumber,
       ...include[0].where,
     };
 

@@ -40,11 +40,11 @@ const seeder = async () => {
   });
 
   await Delivery.create({
-    type: "envio a domicilio",
+    type: "home delivery",
     value: 1799,
   });
   await Delivery.create({
-    type: "retirar por correo",
+    type: "pick up",
     value: 1499,
   });
 
@@ -69,7 +69,6 @@ const seeder = async () => {
     userId: 2,
     qty: 3,
   });
-
   await ProductOrder.create({
     orderId: 2,
     productId: 4,
