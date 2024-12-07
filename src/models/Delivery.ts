@@ -2,10 +2,10 @@ import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
 class Delivery extends Model {
-  id: number;
-  eta: Date;
-  type: string;
-  value: number;
+  id!: number;
+  eta!: Date;
+  type!: string;
+  value!: number;
 }
 
 Delivery.init(

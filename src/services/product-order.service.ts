@@ -1,18 +1,19 @@
-import { ProductOrderDto } from "../dto/product-order.dto";
 import productOrderRepository from "../repositories/product-order.repository";
+import { CreationAttributes } from "sequelize";
+import { ProductOrder } from "../models";
 import { IProductOrderQuery } from "../interfaces/ProductOrder";
 
 const getProductOrders = async (where: IProductOrderQuery) => {
   return await productOrderRepository.findAll(where);
 };
 
-const createProductOrder = async (data: ProductOrderDto) => {
+const createProductOrder = async (data: CreationAttributes<ProductOrder>) => {
   return await productOrderRepository.create(data);
 };
 
 const updateProductOrder = async (
   id: number,
-  data: Partial<ProductOrderDto>
+  data: CreationAttributes<ProductOrder>
 ) => {
   return await productOrderRepository.updateOneById(id, data);
 };

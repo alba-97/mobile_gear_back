@@ -1,8 +1,8 @@
 import { validateToken } from "../config/tokens";
 import { Response, NextFunction } from "express";
-import { CustomRequest } from "../interfaces/CustomRequest";
+import { UserRequest } from "../interfaces/UserRequest";
 
-function validateUser(req: CustomRequest, res: Response, next: NextFunction) {
+function validateUser(req: UserRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   const token = authHeader?.split(" ")[1];
   if (token) {
@@ -14,4 +14,5 @@ function validateUser(req: CustomRequest, res: Response, next: NextFunction) {
     res.sendStatus(401);
   }
 }
+
 export default validateUser;

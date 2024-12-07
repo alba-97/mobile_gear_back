@@ -1,12 +1,13 @@
-import { UserDto } from "../dto/user.dto";
+import { CreationAttributes } from "sequelize";
 import userRepository from "../repositories/user.repository";
+import { User } from "../models";
 
-const createUser = async (data: UserDto) => {
+const createUser = async (data: CreationAttributes<User>) => {
   return await userRepository.createOne(data);
 };
 
 const getUserById = async (id?: number) => {
-  if (!id) return;
+  if (!id) return null;
   return await userRepository.getOneById(id);
 };
 
@@ -26,7 +27,7 @@ const switchPrivileges = async (id: number) => {
   });
 };
 
-const updateUser = async (id: number, data: Partial<UserDto>) => {
+const updateUser = async (id: number, data: CreationAttributes<User>) => {
   return await userRepository.updateOneById(id, data);
 };
 

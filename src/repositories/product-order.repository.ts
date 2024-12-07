@@ -1,9 +1,8 @@
-import { IncludeOptions, WhereOptions } from "sequelize";
-import { IProductOrderQuery } from "../interfaces/ProductOrder";
+import { CreationAttributes, IncludeOptions, WhereOptions } from "sequelize";
 import { Order, Product, User } from "../models";
 import { Op } from "sequelize";
 import ProductOrder from "../models/ProductOrder";
-import { ProductOrderDto } from "../dto/product-order.dto";
+import { IProductOrderQuery } from "../interfaces/ProductOrder";
 
 const findAll = async (query: IProductOrderQuery) => {
   const { username, productName, qty } = query;
@@ -37,11 +36,14 @@ const getOneById = async (id: number) => {
   });
 };
 
-const create = async (data: ProductOrderDto) => {
+const create = async (data: CreationAttributes<ProductOrder>) => {
   return await Product.create(data);
 };
 
-const updateOneById = async (id: number, data: Partial<ProductOrderDto>) => {
+const updateOneById = async (
+  id: number,
+  data: CreationAttributes<ProductOrder>
+) => {
   return await Product.update(data, {
     where: { id },
   });

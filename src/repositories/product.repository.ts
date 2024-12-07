@@ -1,7 +1,11 @@
-import { IncludeOptions, Op, WhereOptions } from "sequelize";
+import {
+  CreationAttributes,
+  IncludeOptions,
+  Op,
+  WhereOptions,
+} from "sequelize";
 import { Brand, Category, Product } from "../models";
 import { IProductQuery } from "../interfaces/Product";
-import { ProductDto } from "../dto/product.dto";
 
 const findAll = async (query: IProductQuery) => {
   const {
@@ -65,13 +69,13 @@ const getOneById = async (id: number) => {
   });
 };
 
-const updateOneById = async (id: number, data: ProductDto) => {
+const updateOneById = async (id: number, data: CreationAttributes<Product>) => {
   return await Product.update(data, {
     where: { id },
   });
 };
 
-const createOne = async (data: ProductDto) => {
+const createOne = async (data: CreationAttributes<Product>) => {
   return await Product.create(data);
 };
 

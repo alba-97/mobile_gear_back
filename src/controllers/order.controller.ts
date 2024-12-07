@@ -1,6 +1,4 @@
 import { Response } from "express";
-import { CustomRequest } from "../interfaces/CustomRequest";
-import { ProductOrder } from "../interfaces/ProductOrder";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -9,39 +7,27 @@ import userService from "../services/user.service";
 import productOrderService from "../services/product-order.service";
 import orderService from "../services/order.service";
 import deliveryService from "../services/delivery.service";
-import emailService from "../services/email.service";
+import { UserRequest } from "../interfaces/UserRequest";
+import { ProductOrder } from "../models";
 
-export const confirmPurchase = async (req: CustomRequest, res: Response) => {
+export const confirmPurchase = async (req: UserRequest, res: Response) => {
   try {
     const user = await userService.getUserById(req.user?.id);
-    const order = await orderService.getOrderById(user?.checkoutId);
-    if (order?.status == "checkout") {
-      if (!req.user?.id) return;
-      productOrderService.updateProductOrder(req.user.id, {
-        status: "purchased",
-      });
-      user?.setOrders(order);
-      const productorders = await productOrderService.getProductOrders({
-        orderId: user?.checkoutId,
-      });
+    if (!user) return res.sendStatus(404);
 
-      const products = productorders
-        .map((item: ProductOrder) => item.product?.name)
-        .join(", ");
-      let eta = order.delivery?.eta;
+    const order = await orderService.getOrderById(user.checkoutId);
+    if (!order) return res.sendStatus(404);
 
-      await emailService.sendPurchaseEmail(products, eta, user?.email);
+    if (order.status !== "checkout") return res.sendStatus(401);
 
-      res.sendStatus(204);
-    } else {
-      res.sendStatus(401);
-    }
+    await orderService.confirmProduct(user, order);
+    res.sendStatus(204);
   } catch (err) {
     res.status(500).send(err);
   }
 };
 
-export const addToCheckout = async (req: CustomRequest, res: Response) => {
+export const addToCheckout = async (req: UserRequest, res: Response) => {
   try {
     const user = await userService.getUserById(req.user?.id);
     if (!user) return;
@@ -51,7 +37,7 @@ export const addToCheckout = async (req: CustomRequest, res: Response) => {
       delivery: delivery,
     });
     if (!order.id) return;
-    order.setUsers(user);
+    order.setUsers([user]);
 
     const { data } = req.body;
     for (let i = 0; i < data.length; i++) {
@@ -72,7 +58,7 @@ export const addToCheckout = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const listCheckout = async (req: CustomRequest, res: Response) => {
+export const listCheckout = async (req: UserRequest, res: Response) => {
   try {
     if (!req.user?.id) return;
     const user = await userService.getUserById(req.user.id);
@@ -94,7 +80,7 @@ export const listCheckout = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const purchaseHistory = async (req: CustomRequest, res: Response) => {
+export const purchaseHistory = async (req: UserRequest, res: Response) => {
   try {
     if (!req.user?.id) return;
     const user = await userService.getUserById(req.user.id);
@@ -111,7 +97,7 @@ export const purchaseHistory = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const listAllOrders = async (req: CustomRequest, res: Response) => {
+export const listAllOrders = async (req: UserRequest, res: Response) => {
   const productOrders = await productOrderService.getProductOrders({});
   res.send(productOrders);
 };

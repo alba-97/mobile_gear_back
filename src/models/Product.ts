@@ -1,5 +1,4 @@
 import { Model, DataTypes } from "sequelize";
-
 import db from "../db";
 
 class Product extends Model {
@@ -11,6 +10,7 @@ class Product extends Model {
   discount: number;
   stock: number;
 }
+
 Product.init(
   {
     name: {

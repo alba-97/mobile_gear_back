@@ -8,14 +8,7 @@ const login = async (email: string, password: string) => {
   const isValid = await user.validatePassword(password);
   if (!isValid) throw new Error("Unauthorized");
 
-  const payload = {
-    id: user.id,
-    email: user.email,
-    password: user.password,
-    is_admin: user.is_admin,
-  };
-
-  const token = generateToken(payload);
+  const token = generateToken(user);
 
   return { user, token };
 };

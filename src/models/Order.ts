@@ -1,13 +1,13 @@
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, HasManySetAssociationsMixin } from "sequelize";
 import db from "../db";
 import User from "./User";
 import Delivery from "./Delivery";
 
 class Order extends Model {
-  id?: number;
-  status?: string;
-  delivery?: Delivery;
-  setUsers: (user: User | null) => void;
+  id!: number;
+  status!: string;
+  delivery!: Delivery;
+  setUsers!: HasManySetAssociationsMixin<User, number>;
 }
 
 Order.init(

@@ -1,7 +1,7 @@
-import { DeliveryDto } from "../dto/delivery.dto";
+import { CreationAttributes } from "sequelize";
 import { Delivery } from "../models";
 
-const createDelivery = async (data: DeliveryDto) => {
+const createDelivery = async (data: CreationAttributes<Delivery>) => {
   return await Delivery.create(data);
 };
 

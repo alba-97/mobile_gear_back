@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomRequest } from "../interfaces/CustomRequest";
+import { UserRequest } from "../interfaces/UserRequest";
 
-const validateAdmin = (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
+const validateAdmin = (req: UserRequest, res: Response, next: NextFunction) => {
   if (req.user?.is_admin) {
     next();
   } else {

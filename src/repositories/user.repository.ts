@@ -1,8 +1,7 @@
-import { IncludeOptions, WhereOptions } from "sequelize";
-import { IUserQuery } from "../interfaces/User";
+import { CreationAttributes, IncludeOptions, WhereOptions } from "sequelize";
 import { Order, PaymentInfo, User } from "../models";
 import { Op } from "sequelize";
-import { UserDto } from "../dto/user.dto";
+import { IUserQuery } from "../interfaces/User";
 
 const findAll = async (query: IUserQuery) => {
   const { is_admin, username, email, first_name, last_name, birth_date, dni } =
@@ -54,13 +53,13 @@ const getOneById = async (id: number) => {
   });
 };
 
-const updateOneById = async (id: number, data: Partial<UserDto>) => {
+const updateOneById = async (id: number, data: CreationAttributes<User>) => {
   return await User.update(data, {
     where: { id },
   });
 };
 
-const createOne = async (data: UserDto) => {
+const createOne = async (data: CreationAttributes<User>) => {
   return await User.create(data);
 };
 

@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { User } from "../models";
 dotenv.config();
-
-import { User } from "../interfaces/User";
 
 const secret = process.env.SECRET ?? "";
 

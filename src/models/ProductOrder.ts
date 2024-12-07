@@ -1,8 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-
 import db from "../db";
-import { Order } from "../interfaces/Order";
-import { Product } from "../interfaces/Product";
+import Product from "./Product";
+import Order from "./Order";
 
 class ProductOrder extends Model {
   qty: number;

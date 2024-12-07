@@ -2,8 +2,8 @@ import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
 class Category extends Model {
-  id: number;
-  name: string;
+  id!: number;
+  name!: string;
 }
 Category.init(
   {

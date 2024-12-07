@@ -1,8 +1,8 @@
 import { Response } from "express";
-import { CustomRequest } from "../interfaces/CustomRequest";
+import { UserRequest } from "../interfaces/UserRequest";
 import categoryService from "../services/category.service";
 
-export const listCategories = async (_: CustomRequest, res: Response) => {
+export const listCategories = async (_: UserRequest, res: Response) => {
   try {
     const categories = await categoryService.listCategories();
     res.send(categories);
@@ -11,7 +11,7 @@ export const listCategories = async (_: CustomRequest, res: Response) => {
   }
 };
 
-export const addCategory = async (req: CustomRequest, res: Response) => {
+export const addCategory = async (req: UserRequest, res: Response) => {
   try {
     const name = req.body.name.toLowerCase();
     const data = await categoryService.addCategory(name);
@@ -25,7 +25,7 @@ export const addCategory = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const editCategory = async (req: CustomRequest, res: Response) => {
+export const editCategory = async (req: UserRequest, res: Response) => {
   try {
     const name = req.body.name;
     await categoryService.editCategory(+req.params.id, name);
@@ -35,7 +35,7 @@ export const editCategory = async (req: CustomRequest, res: Response) => {
   }
 };
 
-export const deleteCategory = async (req: CustomRequest, res: Response) => {
+export const deleteCategory = async (req: UserRequest, res: Response) => {
   try {
     await categoryService.deleteCategory(+req.params.id);
     res.sendStatus(200);
