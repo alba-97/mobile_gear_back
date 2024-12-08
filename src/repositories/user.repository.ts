@@ -57,7 +57,6 @@ const getOne = async (data: CreationAttributes<User>) => {
   return await User.findOne({
     where: data,
     include: [PaymentInfo, Order],
-    attributes: { exclude: ["password", "salt"] },
   });
 };
 

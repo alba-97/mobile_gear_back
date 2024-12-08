@@ -8,7 +8,7 @@ export const listProducts = async (req: UserRequest, res: Response) => {
     const data = await productService.listProducts(req.query);
     res.status(200).send(data);
   } catch (err) {
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -19,7 +19,7 @@ export const discountedProducts = async (_: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -30,7 +30,7 @@ export const getProduct = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -41,7 +41,7 @@ export const editProduct = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -52,7 +52,7 @@ export const addProduct = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -63,6 +63,6 @@ export const deleteProduct = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };

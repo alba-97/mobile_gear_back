@@ -12,7 +12,7 @@ export const login = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -23,7 +23,7 @@ export const signup = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -35,7 +35,7 @@ export const me = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -46,7 +46,7 @@ export const listUsers = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -57,7 +57,7 @@ export const switchPrivileges = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -68,6 +68,6 @@ export const removeUser = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };

@@ -10,7 +10,7 @@ export const listCategories = async (_: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -22,7 +22,7 @@ export const addCategory = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -34,7 +34,7 @@ export const editCategory = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -45,6 +45,6 @@ export const deleteCategory = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };

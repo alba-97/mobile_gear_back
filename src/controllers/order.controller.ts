@@ -27,7 +27,7 @@ export const confirmPurchase = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -39,7 +39,7 @@ export const addToCheckout = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -62,7 +62,7 @@ export const listCheckout = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -81,7 +81,7 @@ export const purchaseHistory = async (req: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };
 
@@ -92,6 +92,6 @@ export const listAllOrders = async (_: UserRequest, res: Response) => {
   } catch (err) {
     if (err instanceof HttpError)
       return res.status(err.status).send(err.message);
-    res.status(500).send(err);
+    if (err instanceof Error) res.status(500).send({ message: err.message });
   }
 };

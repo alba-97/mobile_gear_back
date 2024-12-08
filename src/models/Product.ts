@@ -29,6 +29,7 @@ Product.init(
     },
 
     description: {
+      allowNull: false,
       type: DataTypes.TEXT,
     },
 

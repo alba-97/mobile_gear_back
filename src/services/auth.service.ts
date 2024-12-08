@@ -10,7 +10,6 @@ const login = async (email: string, password: string) => {
   if (!isValid) throw new HttpError(401, "Unauthorized");
 
   const token = generateToken(user);
-
   return { user, token };
 };
 
