@@ -6,14 +6,15 @@ dotenv.config();
 import userService from "../services/user.service";
 import productOrderService from "../services/product-order.service";
 import orderService from "../services/order.service";
-import deliveryService from "../services/delivery.service";
 import { UserRequest } from "../interfaces/UserRequest";
 import { ProductOrder } from "../models";
-import { CreationAttributes } from "sequelize";
+import { HttpError } from "../utils/httpError";
 
 export const confirmPurchase = async (req: UserRequest, res: Response) => {
   try {
-    const user = await userService.getUserById(req.user?.id);
+    if (!req.user?.id) return res.sendStatus(401);
+
+    const user = await userService.getUserById(req.user.id);
     if (!user) return res.sendStatus(404);
 
     const order = await orderService.getOrderById(user.checkoutId);
@@ -24,44 +25,30 @@ export const confirmPurchase = async (req: UserRequest, res: Response) => {
     await orderService.confirmProduct(user, order);
     res.sendStatus(204);
   } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
     res.status(500).send(err);
   }
 };
 
 export const addToCheckout = async (req: UserRequest, res: Response) => {
   try {
-    const user = await userService.getUserById(req.user?.id);
-    if (!user) return;
-    const delivery = await deliveryService.createDelivery(req.body);
-    const order = await orderService.createOrder({
-      status: "checkout",
-      delivery: delivery,
-    });
-    if (!order.id) return;
-    order.setUsers([user]);
-
-    const { data } = req.body;
-    const productOrders = data.map((item: { id: number; quantity: number }) => {
-      return {
-        orderId: order.id,
-        productId: item.id,
-        userId: user.id,
-        qty: item.quantity,
-        status: "checkout",
-      };
-    });
-    await productOrderService.createProductOrder(productOrders);
-    await userService.updateUser(user?.id, { checkoutId: order.id });
+    if (!req.user?.id) return res.sendStatus(401);
+    await orderService.addToCheckout(req.user.id, req.body);
     res.sendStatus(201);
   } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
     res.status(500).send(err);
   }
 };
 
 export const listCheckout = async (req: UserRequest, res: Response) => {
   try {
-    const user = await userService.getUserById(req.user?.id);
-    if (!user || !user.checkoutId) return res.sendStatus(401);
+    if (!req.user?.id) return res.sendStatus(401);
+
+    const user = await userService.getUserById(req.user.id);
+    if (!user || !user.checkoutId) return res.sendStatus(404);
 
     const productOrders = await productOrderService.getProductOrders({
       orderId: user.checkoutId,
@@ -73,13 +60,15 @@ export const listCheckout = async (req: UserRequest, res: Response) => {
     );
     res.send({ data: productOrders, total });
   } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
     res.status(500).send(err);
   }
 };
 
 export const purchaseHistory = async (req: UserRequest, res: Response) => {
   try {
-    if (!req.user?.id) return;
+    if (!req.user?.id) return res.sendStatus(401);
     const user = await userService.getUserById(req.user.id);
     if (user) {
       const orders = await productOrderService.getProductOrders({
@@ -90,11 +79,19 @@ export const purchaseHistory = async (req: UserRequest, res: Response) => {
       res.sendStatus(401);
     }
   } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
     res.status(500).send(err);
   }
 };
 
-export const listAllOrders = async (req: UserRequest, res: Response) => {
-  const productOrders = await productOrderService.getProductOrders();
-  res.send(productOrders);
+export const listAllOrders = async (_: UserRequest, res: Response) => {
+  try {
+    const productOrders = await productOrderService.getProductOrders();
+    res.send(productOrders);
+  } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
+  }
 };

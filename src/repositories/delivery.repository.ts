@@ -2,32 +2,14 @@ import { CreationAttributes, WhereOptions } from "sequelize";
 import { Delivery } from "../models";
 import { Op } from "sequelize";
 import { IDeliveryQuery } from "../interfaces/Delivery";
+import minMaxFilter from "../utils/minMaxFilter";
 
 const getAll = async (query: IDeliveryQuery = {}) => {
   const { type, minPrice, maxPrice, minEta, maxEta } = query;
   const where: WhereOptions<Delivery> = {};
   if (type) where.type = type;
-  switch (true) {
-    case !!minPrice && !!maxPrice:
-      where.price = { [Op.between]: [minPrice, maxPrice] };
-      break;
-    case !!minPrice:
-      where.price = { [Op.gte]: minPrice };
-      break;
-    case !!maxPrice:
-      where.price = { [Op.lte]: maxPrice };
-  }
-
-  switch (true) {
-    case !!minEta && !!maxEta:
-      where.eta = { [Op.between]: [minEta, maxEta] };
-      break;
-    case !!minEta:
-      where.eta = { [Op.gte]: minEta };
-      break;
-    case !!maxEta:
-      where.eta = { [Op.lte]: maxEta };
-  }
+  where.price = minMaxFilter(minPrice, maxPrice);
+  where.eta = minMaxFilter(minEta, maxEta);
 
   const deliveries = await Delivery.findAll({ where });
   return deliveries;

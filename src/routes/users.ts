@@ -3,7 +3,6 @@ import express from "express";
 import {
   listUsers,
   login,
-  logout,
   me,
   removeUser,
   signup,
@@ -16,7 +15,6 @@ const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/logout", logout);
 router.get("/me", validateUser, me);
 
 router.get("/", validateUser, validateAdmin, listUsers);

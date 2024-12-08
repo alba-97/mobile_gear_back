@@ -2,6 +2,7 @@ import { Response } from "express";
 import { UserRequest } from "../interfaces/UserRequest";
 import userService from "../services/user.service";
 import authService from "../services/auth.service";
+import { HttpError } from "../utils/httpError";
 
 export const login = async (req: UserRequest, res: Response) => {
   try {
@@ -9,13 +10,9 @@ export const login = async (req: UserRequest, res: Response) => {
     const result = await authService.login(email, password);
     res.send(result);
   } catch (err) {
-    if (err instanceof Error) {
-      if (err.message === "Unauthorized") {
-        res.status(401).send({ message: "Invalid email or password" });
-      } else {
-        res.status(500).send({ message: "Internal server error" });
-      }
-    }
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
   }
 };
 
@@ -24,17 +21,22 @@ export const signup = async (req: UserRequest, res: Response) => {
     await userService.createUser(req.body);
     res.sendStatus(200);
   } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
     res.status(500).send(err);
   }
 };
 
-export const logout = (_: UserRequest, res: Response) => {
-  res.sendStatus(204);
-};
-
 export const me = async (req: UserRequest, res: Response) => {
-  const user = await userService.getUserById(Number(req.user?.id));
-  res.send(user);
+  try {
+    if (!req.user?.id) return res.sendStatus(401);
+    const user = await userService.getUserById(req.user.id);
+    res.send(user);
+  } catch (err) {
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
+  }
 };
 
 export const listUsers = async (req: UserRequest, res: Response) => {
@@ -42,7 +44,9 @@ export const listUsers = async (req: UserRequest, res: Response) => {
     const users = await userService.listUsers();
     res.send(users);
   } catch (err) {
-    res.status(404).send(err);
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
   }
 };
 
@@ -51,7 +55,9 @@ export const switchPrivileges = async (req: UserRequest, res: Response) => {
     await userService.switchPrivileges(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
-    res.status(404).send(err);
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
   }
 };
 
@@ -60,6 +66,8 @@ export const removeUser = async (req: UserRequest, res: Response) => {
     await userService.removeUser(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
-    res.status(404).send(err);
+    if (err instanceof HttpError)
+      return res.status(err.status).send(err.message);
+    res.status(500).send(err);
   }
 };

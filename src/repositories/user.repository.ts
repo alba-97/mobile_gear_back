@@ -3,7 +3,7 @@ import { Order, PaymentInfo, User } from "../models";
 import { Op } from "sequelize";
 import { IUserQuery } from "../interfaces/User";
 
-const getAll = async (query: IUserQuery) => {
+const getAll = async (query: IUserQuery = {}) => {
   const { isAdmin, username, email, firstName, lastName, birthDate, idNumber } =
     query;
   const where: WhereOptions<User> = {};

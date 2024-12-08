@@ -6,6 +6,7 @@ import {
 } from "sequelize";
 import { Brand, Category, Product } from "../models";
 import { IProductQuery } from "../interfaces/Product";
+import minMaxFilter from "../utils/minMaxFilter";
 
 const getAll = async (query: IProductQuery) => {
   const {
@@ -22,31 +23,8 @@ const getAll = async (query: IProductQuery) => {
 
   if (modelName) where.name = { [Op.iLike]: `%${modelName}%` };
 
-  switch (true) {
-    case !!minDiscount && !!maxDiscount:
-      where.discount = {
-        [Op.between]: [minDiscount, maxDiscount],
-      };
-      break;
-    case !!minDiscount:
-      where.discount = { [Op.gte]: minDiscount };
-      break;
-    case !!maxDiscount:
-      where.discount = { [Op.lte]: maxDiscount };
-      break;
-  }
-
-  switch (true) {
-    case !!minPrice && !!maxPrice:
-      where.price = { [Op.between]: [minPrice, maxPrice] };
-      break;
-    case !!minPrice:
-      where.price = { [Op.gte]: minPrice };
-      break;
-    case !!maxPrice:
-      where.price = { [Op.lte]: maxPrice };
-      break;
-  }
+  where.discount = minMaxFilter(minDiscount, maxDiscount);
+  where.price = minMaxFilter(minPrice, maxPrice);
 
   if (brandName)
     include[0].where = {

@@ -1,22 +1,14 @@
 import { CreationAttributes, WhereOptions } from "sequelize";
 import { Delivery, Order } from "../models";
-import { Op } from "sequelize";
 import { IOrderQuery } from "../interfaces/Order";
+import minMaxFilter from "../utils/minMaxFilter";
 
 const getAll = async (query: IOrderQuery = {}) => {
   const { status, minTotalValue, maxTotalValue } = query;
   const where: WhereOptions<Order> = {};
   if (status) where.status = status;
-  switch (true) {
-    case !!minTotalValue && !!maxTotalValue:
-      where.totalValue = { [Op.between]: [minTotalValue, maxTotalValue] };
-      break;
-    case !!minTotalValue:
-      where.totalValue = { [Op.gte]: minTotalValue };
-      break;
-    case !!maxTotalValue:
-      where.totalValue = { [Op.lte]: minTotalValue };
-  }
+
+  where.totalValue = minMaxFilter(minTotalValue, maxTotalValue);
 
   const deliveries = await Order.findAll({ where });
   return deliveries;

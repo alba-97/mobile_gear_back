@@ -1,23 +1,25 @@
 import { CreationAttributes } from "sequelize";
 import userRepository from "../repositories/user.repository";
 import { User } from "../models";
+import { HttpError } from "../utils/httpError";
 
 const createUser = async (data: CreationAttributes<User>) => {
   return await userRepository.createOne(data);
 };
 
-const getUserById = async (id?: number) => {
-  if (!id) return null;
-  return await userRepository.getOneById(id);
+const getUserById = async (id: number) => {
+  const user = await userRepository.getOneById(id);
+  if (!user) throw new HttpError(404, "User not found");
+  return user;
 };
 
 const listUsers = async () => {
-  return await userRepository.getAll({});
+  return await userRepository.getAll();
 };
 
 const switchPrivileges = async (id: number) => {
   const user = await userRepository.getOneById(id);
-  if (!user) return;
+  if (!user) throw new HttpError(404, "User not found");
 
   const { isAdmin, ...rest } = user;
 
