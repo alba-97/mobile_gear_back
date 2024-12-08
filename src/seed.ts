@@ -6,8 +6,7 @@ const seeder = async () => {
   await Category.create({ name: "default" });
 
   for (let i = 0; i < products.length; i++) {
-    let { name, price, type, brand, product_img, stock, discount } =
-      products[i];
+    let { name, price, type, brand, productImg, stock, discount } = products[i];
     let _brand = await Brand.findOrCreate({ where: { name: brand } });
     let category = await Category.findOrCreate({
       where: { name: type },
@@ -18,7 +17,7 @@ const seeder = async () => {
       price,
       categoryId: category[0].id,
       brandId: _brand[0].id,
-      product_img,
+      productImg,
       stock,
       discount,
     };
@@ -26,14 +25,14 @@ const seeder = async () => {
   }
 
   await User.create({
-    is_admin: true,
+    isAdmin: true,
     username: "admin",
     email: "mobilegearadmin@protonmail.com",
     password: "1234",
   });
 
   await User.create({
-    is_admin: false,
+    isAdmin: false,
     username: "user",
     email: "mobilegeartest@protonmail.com",
     password: "1234",

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { UserRequest } from "../interfaces/UserRequest";
 
 const validateAdmin = (req: UserRequest, res: Response, next: NextFunction) => {
-  if (req.user?.is_admin) {
+  if (req.user?.isAdmin) {
     next();
   } else {
     res.sendStatus(403);

@@ -1,10 +1,17 @@
 import { Model, DataTypes } from "sequelize";
 import db from "../db";
 
-class PaymentInfo extends Model {}
+class PaymentInfo extends Model {
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  idNumber: number;
+  address: string;
+  phoneNumber: number;
+}
 PaymentInfo.init(
   {
-    first_name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -15,7 +22,7 @@ PaymentInfo.init(
         },
       },
     },
-    last_name: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -26,7 +33,7 @@ PaymentInfo.init(
         },
       },
     },
-    birth_date: {
+    birthDate: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
@@ -52,7 +59,7 @@ PaymentInfo.init(
       },
     },
 
-    phone_number: {
+    phoneNumber: {
       type: DataTypes.INTEGER,
       unique: true,
       validate: {

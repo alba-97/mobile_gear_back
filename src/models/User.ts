@@ -15,7 +15,7 @@ class User extends Model {
   id: number;
   username: string;
   email: string;
-  is_admin: boolean;
+  isAdmin: boolean;
   password: string;
   salt: string;
   checkoutId: number;
@@ -37,7 +37,7 @@ class User extends Model {
 
 User.init(
   {
-    is_admin: { type: DataTypes.BOOLEAN, defaultValue: false },
+    isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false },
     username: {
       type: DataTypes.STRING,
       allowNull: false,

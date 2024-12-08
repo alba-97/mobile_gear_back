@@ -4,37 +4,30 @@ import { Op } from "sequelize";
 import { IUserQuery } from "../interfaces/User";
 
 const getAll = async (query: IUserQuery) => {
-  const {
-    is_admin,
-    username,
-    email,
-    first_name,
-    last_name,
-    birth_date,
-    idNumber,
-  } = query;
+  const { isAdmin, username, email, firstName, lastName, birthDate, idNumber } =
+    query;
   const where: WhereOptions<User> = {};
   const include: IncludeOptions[] = [{ model: PaymentInfo }];
 
-  if (is_admin) where.is_admin = is_admin;
+  if (isAdmin) where.isAdmin = isAdmin;
   if (username) where.username = { [Op.iLike]: `%${username}%` };
   if (email) where.email = { [Op.iLike]: `%${email}%` };
 
-  if (first_name)
+  if (firstName)
     include[0].where = {
-      first_name: { [Op.iLike]: `%${first_name}%` },
+      firstName: { [Op.iLike]: `%${firstName}%` },
       ...include[0].where,
     };
 
-  if (last_name)
+  if (lastName)
     include[0].where = {
-      last_name: { [Op.iLike]: `%${last_name}%` },
+      lastName: { [Op.iLike]: `%${lastName}%` },
       ...include[0].where,
     };
 
-  if (birth_date)
+  if (birthDate)
     include[0].where = {
-      birth_date,
+      birthDate,
       ...include[0].where,
     };
 

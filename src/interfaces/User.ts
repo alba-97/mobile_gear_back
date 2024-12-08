@@ -1,9 +1,9 @@
 export interface IUserQuery {
-  is_admin?: string;
+  isAdmin?: string;
   username?: string;
   email?: string;
-  first_name?: string;
-  last_name?: string;
-  birth_date?: string;
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
   idNumber?: number;
 }

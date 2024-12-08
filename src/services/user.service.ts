@@ -19,11 +19,11 @@ const switchPrivileges = async (id: number) => {
   const user = await userRepository.getOneById(id);
   if (!user) return;
 
-  const { is_admin, ...rest } = user;
+  const { isAdmin, ...rest } = user;
 
   return await userRepository.updateOneById(id, {
     ...rest,
-    is_admin: !is_admin,
+    isAdmin: !isAdmin,
   });
 };
 

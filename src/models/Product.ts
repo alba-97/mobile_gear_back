@@ -3,7 +3,7 @@ import db from "../db";
 
 class Product extends Model {
   name: string;
-  product_img: string;
+  productImg: string;
   description: string;
   features: string;
   price: number;
@@ -21,7 +21,7 @@ Product.init(
       },
     },
 
-    product_img: {
+    productImg: {
       type: DataTypes.STRING,
       validate: {
         isUrl: { msg: "Product image must be a valid URL" },
