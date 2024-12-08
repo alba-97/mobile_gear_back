@@ -7,7 +7,7 @@ import {
 import { Brand, Category, Product } from "../models";
 import { IProductQuery } from "../interfaces/Product";
 
-const findAll = async (query: IProductQuery) => {
+const getAll = async (query: IProductQuery) => {
   const {
     modelName,
     categoryName,
@@ -75,6 +75,10 @@ const updateOneById = async (id: number, data: CreationAttributes<Product>) => {
   });
 };
 
+const updateCategories = async (categoryId: number) => {
+  await Product.update({ categoryId: 1 }, { where: { categoryId } });
+};
+
 const createOne = async (data: CreationAttributes<Product>) => {
   return await Product.create(data);
 };
@@ -85,4 +89,11 @@ const deleteOneById = async (id: number) => {
   });
 };
 
-export default { findAll, getOneById, updateOneById, createOne, deleteOneById };
+export default {
+  getAll,
+  getOneById,
+  updateOneById,
+  updateCategories,
+  createOne,
+  deleteOneById,
+};

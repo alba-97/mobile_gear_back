@@ -15,11 +15,8 @@ export const addCategory = async (req: UserRequest, res: Response) => {
   try {
     const name = req.body.name.toLowerCase();
     const data = await categoryService.addCategory(name);
-    if (data[1]) {
-      res.send(data[0]);
-    } else {
-      res.sendStatus(409);
-    }
+    if (!data) return res.sendStatus(409);
+    res.send(data);
   } catch (err) {
     res.status(500).send(err);
   }

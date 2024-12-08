@@ -4,11 +4,11 @@ import { Product } from "../models";
 import { IProductQuery } from "../interfaces/Product";
 
 const listProducts = async (query: IProductQuery) => {
-  return await productRepository.findAll(query);
+  return await productRepository.getAll(query);
 };
 
 const discountedProducts = async () => {
-  return await productRepository.findAll({
+  return await productRepository.getAll({
     minDiscount: 15,
   });
 };

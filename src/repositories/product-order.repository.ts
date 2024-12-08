@@ -4,7 +4,7 @@ import { Op } from "sequelize";
 import ProductOrder from "../models/ProductOrder";
 import { IProductOrderQuery } from "../interfaces/ProductOrder";
 
-const findAll = async (query: IProductOrderQuery) => {
+const getAll = async (query: IProductOrderQuery) => {
   const { username, productName, qty } = query;
   const where: WhereOptions<IProductOrderQuery> = {};
   const include: IncludeOptions[] = [
@@ -36,8 +36,8 @@ const getOneById = async (id: number) => {
   });
 };
 
-const create = async (data: CreationAttributes<ProductOrder>) => {
-  return await Product.create(data);
+const create = async (data: CreationAttributes<ProductOrder>[]) => {
+  return await Product.bulkCreate(data);
 };
 
 const updateOneById = async (
@@ -55,4 +55,4 @@ const deleteOneById = async (id: number) => {
   });
 };
 
-export default { findAll, getOneById, updateOneById, create, deleteOneById };
+export default { getAll, getOneById, updateOneById, create, deleteOneById };

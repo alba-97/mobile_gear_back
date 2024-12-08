@@ -3,11 +3,11 @@ import { CreationAttributes } from "sequelize";
 import { ProductOrder } from "../models";
 import { IProductOrderQuery } from "../interfaces/ProductOrder";
 
-const getProductOrders = async (where: IProductOrderQuery) => {
-  return await productOrderRepository.findAll(where);
+const getProductOrders = async (where: IProductOrderQuery = {}) => {
+  return await productOrderRepository.getAll(where);
 };
 
-const createProductOrder = async (data: CreationAttributes<ProductOrder>) => {
+const createProductOrder = async (data: CreationAttributes<ProductOrder>[]) => {
   return await productOrderRepository.create(data);
 };
 

@@ -1,16 +1,15 @@
 import { CreationAttributes } from "sequelize";
-import { Delivery, Order, ProductOrder, User } from "../models";
+import { Order, ProductOrder, User } from "../models";
 import productOrderService from "./product-order.service";
 import emailService from "./email.service";
+import orderRepository from "../repositories/order.repository";
 
-const getOrderById = async (id?: number) => {
-  return await Order.findByPk(id, {
-    include: Delivery,
-  });
+const getOrderById = async (id: number) => {
+  return await orderRepository.getOneById(id);
 };
 
 const createOrder = async (data: CreationAttributes<Order>) => {
-  return await Order.create(data);
+  return await orderRepository.createOne(data);
 };
 
 const confirmProduct = async (user: User, order: Order) => {

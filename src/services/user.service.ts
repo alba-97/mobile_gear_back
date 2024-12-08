@@ -12,7 +12,7 @@ const getUserById = async (id?: number) => {
 };
 
 const listUsers = async () => {
-  return await userRepository.findAll({});
+  return await userRepository.getAll({});
 };
 
 const switchPrivileges = async (id: number) => {

@@ -5,7 +5,7 @@ class Delivery extends Model {
   id: number;
   eta: Date;
   type: string;
-  value: number;
+  price: number;
 }
 
 Delivery.init(
@@ -20,13 +20,13 @@ Delivery.init(
         },
       },
     },
-    value: {
+    price: {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0.0,
       validate: {
-        isFloat: { msg: "Delivery value must be a valid number" },
-        min: { args: [0], msg: "Delivery value cannot be negative" },
+        isFloat: { msg: "Delivery price must be a valid number" },
+        min: { args: [0], msg: "Delivery price cannot be negative" },
       },
     },
     eta: {

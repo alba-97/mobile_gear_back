@@ -3,7 +3,7 @@ import { Order, PaymentInfo, User } from "../models";
 import { Op } from "sequelize";
 import { IUserQuery } from "../interfaces/User";
 
-const findAll = async (query: IUserQuery) => {
+const getAll = async (query: IUserQuery) => {
   const {
     is_admin,
     username,
@@ -60,6 +60,14 @@ const getOneById = async (id: number) => {
   });
 };
 
+const getOne = async (data: CreationAttributes<User>) => {
+  return await User.findOne({
+    where: data,
+    include: [PaymentInfo, Order],
+    attributes: { exclude: ["password", "salt"] },
+  });
+};
+
 const updateOneById = async (id: number, data: CreationAttributes<User>) => {
   return await User.update(data, {
     where: { id },
@@ -76,4 +84,11 @@ const deleteOneById = async (id: number) => {
   });
 };
 
-export default { findAll, getOneById, updateOneById, createOne, deleteOneById };
+export default {
+  getAll,
+  getOneById,
+  getOne,
+  updateOneById,
+  createOne,
+  deleteOneById,
+};

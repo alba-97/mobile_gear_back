@@ -9,6 +9,7 @@ import orderService from "../services/order.service";
 import deliveryService from "../services/delivery.service";
 import { UserRequest } from "../interfaces/UserRequest";
 import { ProductOrder } from "../models";
+import { CreationAttributes } from "sequelize";
 
 export const confirmPurchase = async (req: UserRequest, res: Response) => {
   try {
@@ -40,18 +41,17 @@ export const addToCheckout = async (req: UserRequest, res: Response) => {
     order.setUsers([user]);
 
     const { data } = req.body;
-    for (let i = 0; i < data.length; i++) {
-      await productOrderService.createProductOrder({
+    const productOrders = data.map((item: { id: number; quantity: number }) => {
+      return {
         orderId: order.id,
-        productId: data[i].id,
-        userId: user?.id,
-        qty: data[i].quantity,
+        productId: item.id,
+        userId: user.id,
+        qty: item.quantity,
         status: "checkout",
-      });
-    }
-
+      };
+    });
+    await productOrderService.createProductOrder(productOrders);
     await userService.updateUser(user?.id, { checkoutId: order.id });
-
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send(err);
@@ -60,21 +60,18 @@ export const addToCheckout = async (req: UserRequest, res: Response) => {
 
 export const listCheckout = async (req: UserRequest, res: Response) => {
   try {
-    if (!req.user?.id) return;
-    const user = await userService.getUserById(req.user.id);
-    if (user && user.checkoutId) {
-      const productOrders = await productOrderService.getProductOrders({
-        orderId: user.checkoutId,
-      });
-      const total = productOrders.reduce(
-        (acc: number, item: ProductOrder) =>
-          acc + (item.product?.price ?? 0) * item.qty,
-        0
-      );
-      res.send({ data: productOrders, total });
-    } else {
-      res.sendStatus(401);
-    }
+    const user = await userService.getUserById(req.user?.id);
+    if (!user || !user.checkoutId) return res.sendStatus(401);
+
+    const productOrders = await productOrderService.getProductOrders({
+      orderId: user.checkoutId,
+    });
+    const total = productOrders.reduce(
+      (acc: number, item: ProductOrder) =>
+        acc + (item.product?.price ?? 0) * item.qty,
+      0
+    );
+    res.send({ data: productOrders, total });
   } catch (err) {
     res.status(500).send(err);
   }
@@ -98,6 +95,6 @@ export const purchaseHistory = async (req: UserRequest, res: Response) => {
 };
 
 export const listAllOrders = async (req: UserRequest, res: Response) => {
-  const productOrders = await productOrderService.getProductOrders({});
+  const productOrders = await productOrderService.getProductOrders();
   res.send(productOrders);
 };
