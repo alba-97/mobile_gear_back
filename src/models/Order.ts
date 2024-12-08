@@ -6,14 +6,14 @@ import Delivery from "./Delivery";
 class Order extends Model {
   id: number;
   status: string;
-  totalValue: number;
+  totalPrice: number;
   delivery: Delivery;
   setUsers: HasManySetAssociationsMixin<User, number>;
 }
 
 Order.init(
   {
-    totalValue: {
+    totalPrice: {
       type: DataTypes.FLOAT,
       validate: {
         isFloat: { msg: "Total value must be a valid number" },

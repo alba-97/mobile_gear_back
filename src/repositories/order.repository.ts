@@ -4,11 +4,11 @@ import { IOrderQuery } from "../interfaces/Order";
 import minMaxFilter from "../utils/minMaxFilter";
 
 const getAll = async (query: IOrderQuery = {}) => {
-  const { status, minTotalValue, maxTotalValue } = query;
+  const { status, mintotalPrice, maxtotalPrice } = query;
   const where: WhereOptions<Order> = {};
   if (status) where.status = status;
 
-  where.totalValue = minMaxFilter(minTotalValue, maxTotalValue);
+  where.totalPrice = minMaxFilter(mintotalPrice, maxtotalPrice);
 
   const deliveries = await Order.findAll({ where });
   return deliveries;

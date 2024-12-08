@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json());
 
-const ORIGIN = process.env.ORIGIN || "http://localhost:3000";
+const ORIGIN = process.env.ORIGIN;
 
 app.use(
   cors({
