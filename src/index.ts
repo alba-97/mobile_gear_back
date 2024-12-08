@@ -12,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 
+const PORT = process.env.PORT;
 const ORIGIN = process.env.ORIGIN;
 
 app.use(
@@ -32,7 +33,7 @@ db.sync({ force })
       seeder();
       console.log("Fake data created");
     }
-    app.listen(8080, () => console.log("Server listening on port 8080"));
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
   })
   .catch((error: Error) => console.log(error));
 

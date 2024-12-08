@@ -28,14 +28,14 @@ const seeder = async () => {
     isAdmin: true,
     username: "admin",
     email: "mobilegearadmin@protonmail.com",
-    password: "1234",
+    password: "12345678",
   });
 
   await User.create({
     isAdmin: false,
     username: "user",
     email: "mobilegeartest@protonmail.com",
-    password: "1234",
+    password: "12345678",
   });
 
   await Delivery.create({

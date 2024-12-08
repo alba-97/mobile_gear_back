@@ -3,13 +3,12 @@ import dotenv from "dotenv";
 import { User } from "../models";
 dotenv.config();
 
-const secret = process.env.SECRET ?? "";
+const secret = process.env.JWT_SECRET ?? "";
 
 export const generateToken = (payload: User) => {
   const token = jwt.sign({ payload }, secret, {
     expiresIn: "2h",
   });
-
   return token ?? "";
 };
 

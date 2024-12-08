@@ -13,7 +13,7 @@ const minMaxFilter = (min?: number | Date, max?: number | Date) => {
       options = { [Op.lte]: max };
       break;
     default:
-      options = {};
+      options = { [Op.gte]: 0 };
       break;
   }
   return options;
