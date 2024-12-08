@@ -6,7 +6,7 @@ import {
   listAllOrders,
   listCheckout,
   purchaseHistory,
-} from "../controller/order.controller";
+} from "../controllers/order.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 
@@ -17,6 +17,6 @@ router.get("/checkout", validateUser, listCheckout);
 router.post("/confirm", validateUser, confirmPurchase);
 router.get("/history", validateUser, purchaseHistory);
 
-router.get("/orders", validateUser, validateAdmin, listAllOrders);
+router.get("/", validateUser, validateAdmin, listAllOrders);
 
 export default router;

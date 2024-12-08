@@ -1,20 +1,24 @@
-import { Category, Product } from "../models";
+import categoryRepository from "../repositories/category.repository";
+import productRepository from "../repositories/product.repository";
+import { HttpError } from "../utils/httpError";
 
 const listCategories = async () => {
-  return await Category.findAll();
+  return await categoryRepository.getAll();
 };
 
 const addCategory = async (name: string) => {
-  return await Category.findOrCreate({ where: { name } });
+  const existingCategory = await categoryRepository.getOne({ name });
+  if (existingCategory) throw new HttpError(409, "Category already exists");
+  return await categoryRepository.createOne({ name });
 };
 
 const editCategory = async (id: number, name: string) => {
-  return await Category.update({ name }, { where: { id } });
+  return await categoryRepository.updateOneById(id, { name });
 };
 
 const deleteCategory = async (id: number) => {
-  await Product.update({ categoryId: 1 }, { where: { categoryId: id } });
-  return await Category.destroy({ where: { id } });
+  await productRepository.updateCategories(id);
+  await categoryRepository.deleteOneById(id);
 };
 
 export default { listCategories, addCategory, editCategory, deleteCategory };

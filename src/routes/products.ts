@@ -6,7 +6,7 @@ import {
   editProduct,
   getProduct,
   listProducts,
-} from "../controller/product.controller";
+} from "../controllers/product.controller";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 
@@ -16,8 +16,8 @@ router.get("/", listProducts);
 router.get("/discounted", discountedProducts);
 router.get("/:id", getProduct);
 
-router.post("/products/", validateUser, validateAdmin, addProduct);
-router.put("/products/:id", validateUser, validateAdmin, editProduct);
-router.delete("/products/:id", validateUser, validateAdmin, deleteProduct);
+router.post("/", validateUser, validateAdmin, addProduct);
+router.put("/:id", validateUser, validateAdmin, editProduct);
+router.delete("/:id", validateUser, validateAdmin, deleteProduct);
 
 export default router;

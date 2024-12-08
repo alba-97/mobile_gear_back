@@ -1,69 +1,32 @@
-import { IncludeOptions, Op, WhereOptions } from "sequelize";
-import { Brand, Category, Product } from "../models";
-
-interface IProductQuery {
-  modelName?: string;
-  categoryName?: string;
-  min?: number;
-  max?: number;
-  brandName?: string;
-}
+import { CreationAttributes } from "sequelize";
+import productRepository from "../repositories/product.repository";
+import { Product } from "../models";
+import { IProductQuery } from "../interfaces/Product";
 
 const listProducts = async (query: IProductQuery) => {
-  const { modelName, categoryName, min, max, brandName } = query;
-  const where: WhereOptions<Product> = {};
-  const include: IncludeOptions[] = [{ model: Brand }, { model: Category }];
-
-  if (modelName) where.name = { [Op.iLike]: `%${modelName}%` };
-
-  if (min || max) {
-    if (min && max) where.price = { [Op.between]: [Number(min), Number(max)] };
-    else if (min) where.price = { [Op.gte]: Number(min) };
-    else where.price = { [Op.lte]: Number(max) };
-  }
-
-  if (brandName)
-    include[0].where = {
-      name: { [Op.iLike]: `%${brandName}%` },
-    };
-
-  if (categoryName)
-    include[1].where = {
-      name: { [Op.iLike]: `%${categoryName}%` },
-    };
-
-  return await Product.findAll({ where, include });
+  return await productRepository.getAll(query);
 };
 
 const discountedProducts = async () => {
-  return await Product.findAll({
-    where: {
-      discount: { [Op.gt]: 15 },
-    },
-    include: [Brand, Category],
+  return await productRepository.getAll({
+    minDiscount: 15,
   });
 };
 
 const getProduct = async (id: number) => {
-  return await Product.findByPk(id, {
-    include: [Brand, Category],
-  });
+  return await productRepository.getOneById(id);
 };
 
-const editProduct = async (id: number, productData: any) => {
-  return await Product.update(productData, {
-    where: { id },
-  });
+const editProduct = async (id: number, data: CreationAttributes<Product>) => {
+  return await productRepository.updateOneById(id, data);
 };
 
-const addProduct = async (productData: any) => {
-  return await Product.create(productData);
+const addProduct = async (data: CreationAttributes<Product>) => {
+  return await productRepository.createOne(data);
 };
 
 const deleteProduct = async (id: number) => {
-  return await Product.destroy({
-    where: { id },
-  });
+  return await productRepository.deleteOneById(id);
 };
 
 export default {

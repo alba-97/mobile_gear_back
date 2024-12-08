@@ -1,34 +1,40 @@
-import { Order, User } from "../models";
+import { CreationAttributes } from "sequelize";
+import userRepository from "../repositories/user.repository";
+import { User } from "../models";
+import { HttpError } from "../utils/httpError";
 
-const createUser = async (userData: any) => {
-  await User.create(userData);
+const createUser = async (data: CreationAttributes<User>) => {
+  return await userRepository.createOne(data);
 };
 
-const getUserById = async (id?: number) => {
-  return await User.findOne({
-    where: { id },
-    attributes: { exclude: ["password", "salt"] },
-    include: [Order],
-  });
+const getUserById = async (id: number) => {
+  const user = await userRepository.getOneById(id);
+  if (!user) throw new HttpError(404, "User not found");
+  return user;
 };
 
 const listUsers = async () => {
-  return await User.findAll({
-    attributes: { exclude: ["password", "salt"] },
+  return await userRepository.getAll();
+};
+
+const switchPrivileges = async (id: number) => {
+  const user = await userRepository.getOneById(id);
+  if (!user) throw new HttpError(404, "User not found");
+
+  const { isAdmin, ...rest } = user;
+
+  return await userRepository.updateOneById(id, {
+    ...rest,
+    isAdmin: !isAdmin,
   });
 };
 
-const switchPrivileges = async (userId: number) => {
-  const user = await User.findByPk(userId);
-  await User.update({ is_admin: !user?.is_admin }, { where: { id: user?.id } });
+const updateUser = async (id: number, data: CreationAttributes<User>) => {
+  return await userRepository.updateOneById(id, data);
 };
 
-const updateUser = async (data: any, where?: any) => {
-  await User.update(data, { where });
-};
-
-const removeUser = async (userId: number) => {
-  await User.destroy({ where: { id: userId } });
+const removeUser = async (id: number) => {
+  return await userRepository.deleteOneById(id);
 };
 
 export default {

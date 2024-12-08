@@ -1,5 +1,7 @@
-export interface Delivery {
-  eta: Date;
-  type: string;
-  value: number;
+export interface IDeliveryQuery {
+  type?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minEta?: Date;
+  maxEta?: Date;
 }

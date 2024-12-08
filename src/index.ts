@@ -12,7 +12,8 @@ const app = express();
 
 app.use(express.json());
 
-const ORIGIN = process.env.ORIGIN || "http://localhost:3000";
+const PORT = process.env.PORT;
+const ORIGIN = process.env.ORIGIN;
 
 app.use(
   cors({
@@ -32,7 +33,7 @@ db.sync({ force })
       seeder();
       console.log("Fake data created");
     }
-    app.listen(8080, () => console.log("Server listening on port 8080"));
+    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
   })
   .catch((error: Error) => console.log(error));
 

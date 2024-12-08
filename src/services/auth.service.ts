@@ -1,21 +1,15 @@
 import { generateToken } from "../config/tokens";
-import { User } from "../models";
+import userRepository from "../repositories/user.repository";
+import { HttpError } from "../utils/httpError";
 
 const login = async (email: string, password: string) => {
-  const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error("User doesn't exist");
+  const user = await userRepository.getOne({ email });
+  if (!user) throw new HttpError(401, "Unauthorized");
 
   const isValid = await user.validatePassword(password);
-  if (!isValid) throw new Error("Unauthorized");
+  if (!isValid) throw new HttpError(401, "Unauthorized");
 
-  const payload = {
-    id: user.id,
-    email: user.email,
-    password: user.password,
-    is_admin: user.is_admin,
-  };
-
-  const token = generateToken(payload);
+  const token = generateToken(user);
   return { user, token };
 };
 

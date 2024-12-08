@@ -1,11 +1,9 @@
-export interface User {
-  id: number;
+export interface IUserQuery {
+  isAdmin?: string;
   username?: string;
-  email: string;
-  password: string;
-  is_admin: boolean;
-  salt?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  hash?: (plainPassword: string, salt: string) => Promise<string>;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
+  idNumber?: number;
 }
