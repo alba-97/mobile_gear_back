@@ -6,17 +6,27 @@ const seeder = async () => {
   await Category.create({ name: "default" });
 
   for (let i = 0; i < products.length; i++) {
-    let { name, price, type, brand, productImg, stock, discount } = products[i];
-    let _brand = await Brand.findOrCreate({ where: { name: brand } });
+    let {
+      name,
+      description,
+      price,
+      category: _category,
+      brand: _brand,
+      productImg,
+      stock,
+      discount,
+    } = products[i];
+    let brand = await Brand.findOrCreate({ where: { name: _brand } });
     let category = await Category.findOrCreate({
-      where: { name: type },
+      where: { name: _category },
     });
 
     const product = {
       name,
+      description,
       price,
       categoryId: category[0].id,
-      brandId: _brand[0].id,
+      brandId: brand[0].id,
       productImg,
       stock,
       discount,
