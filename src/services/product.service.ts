@@ -9,7 +9,7 @@ const listProducts = async (query: IProductQuery) => {
 
 const discountedProducts = async () => {
   return await productRepository.getAll({
-    minDiscount: 15,
+    minDiscount: 20,
   });
 };
 

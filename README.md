@@ -1,8 +1,8 @@
 # Mobile Gear - Backend
 
-e-commerce de dispositivos moviles y accesiorios.
+E-commerce for mobile devices and accessories.
 
-### Dependencias:
+### Dependencies:
 
 - @faker-js/faker
 - bcrypt
@@ -17,34 +17,32 @@ e-commerce de dispositivos moviles y accesiorios.
 - pg-hstore
 - sequelize
 
-### Instalacion:
+### Installation:
 
-- clona el repositorio
-- En la terminal, navega hasta el directorio raíz
-- ejecuta "npm i" para instalar todas las dependencias
-- asegurate de tener configurado un archivo .env con los datos correspondientes.
-- inicia el servidor con "npm start"
+- Clone the repository.
+- In the terminal, navigate to the root directory.
+- Run `npm i` to install all dependencies.
+- Make sure you have a properly configured `.env` file with the required data.
+- Start the server with `npm start`.
 
-### Modelos de Datos
+### Data Models
 
-- Brands: representa las marcas de los dispositivos móviles y accesorios.
-- Categories: describe las categorías en las que se clasifican los productos.
-- Deliverys: gestiona los envios de los pedidos.
-- Orders: interviene en la ejecucion de las ordenes del carrito.
-- PaymentInfo: registra la información de pago de los usuarios.
-- Payments: establece el tipo de pago utilizado en la operacion.
-- ProductOrders: establece la relación entre los productos y los pedidos.
-- Products: contiene la información de los productos disponibles
-- Users: almacena los datos de los usuarios registrados.
+- **Brands**: Represents the brands of mobile devices and accessories.
+- **Categories**: Describes the categories into which products are classified.
+- **Deliverys**: Manages the shipping of orders.
+- **Orders**: Handles the execution of cart orders.
+- **PaymentInfo**: Records user payment information.
+- **Payments**: Defines the type of payment used in transactions.
+- **ProductOrders**: Establishes the relationship between products and orders.
+- **Products**: Contains information about the available products.
+- **Users**: Stores data about registered users.
 
 ![Copy of Copy of Untitled Diagram](https://github.com/sheinken88/mobile_gear_back/assets/125990977/9e2fb09e-eb7d-4a88-9892-0589fd048e08)
 
+### Routes
 
-
-### Rutas
-
-- admin: permite realizar operaciones de administración, como la gestión de productos y usuarios.
-- cart: permite gestionar el carrito de compras de los usuarios.
-- orders: permite realizar y gestionar las ventas del carrito.
-- products: ofrece funcionalidades para la gestión de productos, como la creación, actualización y obtención de detalles de los productos.
-- users: permite registrar usuarios, iniciar y cerrar sesion.
+- **admin**: Allows administrative operations, such as managing products and users.
+- **cart**: Manages user shopping carts.
+- **orders**: Facilitates and manages cart sales.
+- **products**: Provides functionalities for managing products, such as creation, updating, and retrieving product details.
+- **users**: Enables user registration, login, and logout.

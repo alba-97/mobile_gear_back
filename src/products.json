@@ -9,7 +9,7 @@
     "features": "",
     "stock": 13,
     "discount": 39,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": ""
   },
   {
     "name": "Galaxy S23 Ultra",
@@ -21,7 +21,7 @@
     "features": "",
     "stock": 18,
     "discount": 8,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "Samsung's premium flagship smartphone offering top-tier performance, advanced camera systems, and 5G support."
   },
   {
     "name": "Galaxy S23",
@@ -33,7 +33,7 @@
     "features": "",
     "stock": 13,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A high-end smartphone from Samsung with cutting-edge features and a sleek design."
   },
   {
     "name": "Galaxy S23+",
@@ -45,7 +45,7 @@
     "features": "",
     "stock": 19,
     "discount": 8,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A larger version of the Galaxy S23, offering an enhanced display and extended battery life."
   },
   {
     "name": "Galaxy Z Fold4",
@@ -57,7 +57,7 @@
     "features": "",
     "stock": 14,
     "discount": 8,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A revolutionary foldable smartphone combining a compact design with powerful multitasking capabilities."
   },
   {
     "name": "Galaxy Z Flip4",
@@ -69,7 +69,7 @@
     "features": "",
     "stock": 14,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A stylish flip phone with modern features, compact design, and innovative display technology."
   },
   {
     "name": "Galaxy Z Fold3 5G",
@@ -81,7 +81,7 @@
     "features": "",
     "stock": 1,
     "discount": 34,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "An earlier version of Samsung's foldable series, offering versatility and a large display experience."
   },
   {
     "name": "Galaxy S22 Ultra",
@@ -93,7 +93,7 @@
     "features": "",
     "stock": 6,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A top-tier smartphone with an advanced camera system and exceptional performance for power users."
   },
   {
     "name": "Galaxy S22+",
@@ -105,7 +105,7 @@
     "features": "",
     "stock": 19,
     "discount": 37,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A versatile smartphone with a premium design and enhanced battery life for extended use."
   },
   {
     "name": "Galaxy S22",
@@ -117,188 +117,187 @@
     "features": "",
     "stock": 17,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A compact yet powerful smartphone featuring the latest Samsung technology."
   },
   {
     "name": "Super Fast Wireless Charger",
     "price": 26999,
     "links": "https://www.samsung.com/ar/mobile-accessories/super-fast-wireless-charger-dark-gray-ep-p2400tbsgar/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ep-p2400tbsgar/gallery/ar-ep-p2400-ep-p2400tbsgar-thumb-533044396?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 5,
     "discount": 53,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A high-speed wireless charger designed for quick and efficient charging."
   },
   {
-    "name": "Cargador Inalámbrico Rápido 15W",
+    "name": "Super Fast Wireless Charger 15W",
     "price": 40499,
     "links": "https://www.samsung.com/ar/mobile-accessories/super-fast-wireless-charger-duo-dark-gray-ep-p5400tbsgar/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ep-p5400tbsgar/gallery/ar-ep-p5400-ep-p5400tbsgar-thumb-532118545?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 20,
     "discount": 47,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A 15W wireless charger offering super-fast charging for compatible devices."
   },
   {
     "name": "Wireless Charger Convertible",
     "price": 6499,
     "links": "https://www.samsung.com/ar/mobile-accessories/wireless-charger-convertible-2020-white-ep-n3300twegar/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ep-n3300twegar/gallery/ar-wireless-charger-convertible-381101-ep-n3300twegar-thumb-408674351?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 0,
     "discount": 12,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A versatile wireless charger that can be used in both pad and stand modes."
   },
   {
-    "name": "Adaptador de viaje - Sin Cable (15W)",
+    "name": "Travel Adapter (15W)",
     "price": 6499,
     "links": "https://www.samsung.com/ar/mobile-accessories/travel-adapter-black-ep-ta200nbegar/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ep-ta200nbegar/gallery/ar-15w-traveladapter-epta200-ep-ta200nbegar-thumb-404962535?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 0,
     "discount": 12,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A compact travel adapter providing fast and reliable charging on the go."
   },
   {
     "name": "Galaxy A34 5G Clear Case",
     "price": 8999,
     "links": "https://www.samsung.com/ar/mobile-accessories/galaxy-a34-5g-clear-case-transparent-ef-qa346ctegww/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ef-qa346ctegww/gallery/ar-galaxy-a34-5g-clear-case-ef-qa346-ef-qa346ctegww-thumb-536118643?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 18,
     "discount": 17,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A durable and transparent case designed to protect the Galaxy A34 5G while showcasing its design."
   },
   {
     "name": "Card Slot Case para Galaxy A34 5G",
     "price": 6999,
     "links": "https://www.samsung.com/ar/mobile-accessories/galaxy-a34-5g-card-slot-case-black-ef-oa346tbegww/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ef-oa346tbegww/gallery/ar-galaxy-a34-5g-card-slot-case-ef-oa346-ef-oa346tbegww-thumb-536118411?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 9,
     "discount": 13,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A protective case for the Galaxy A34 5G with a convenient card slot feature."
   },
   {
-    "name": "Silicone Case para Galaxy A54 5G",
+    "name": "Silicone Case for Galaxy A54 5G",
     "price": 13499,
     "links": "https://www.samsung.com/ar/mobile-accessories/galaxy-a54-5g-silicone-case-blueberry-ef-pa546tvegww/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ef-pa546tvegww/gallery/ar-galaxy-a54-5g-silicone-case-ef-pa546-ef-pa546tvegww-thumb-536117488?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 11,
     "discount": 26,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A soft and durable silicone case designed for the Galaxy A54 5G."
   },
   {
-    "name": "Clear Case para Galaxy A54 5G",
+    "name": "Clear Case for Galaxy A54 5G",
     "price": 8999,
     "links": "https://www.samsung.com/ar/mobile-accessories/galaxy-a54-5g-clear-case-transparent-ef-qa546ctegww/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/ef-qa546ctegww/gallery/ar-galaxy-a54-5g-clear-case-ef-qa546-ef-qa546ctegww-thumb-536115735?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 5,
     "discount": 17,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A transparent case offering protection for the Galaxy A54 5G while highlighting its design."
   },
   {
-    "name": "Galaxy Buds2 Pro",
+    "name": "Galaxy Buds 2 Pro",
     "price": 78999,
     "links": "https://www.samsung.com/ar/audio-sound/galaxy-buds/galaxy-buds2-pro-bora-purple-sm-r510nlvaaro/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/2208/gallery/ar-galaxy-buds2-pro-r510-sm-r510nlvaaro-thumb-533194806?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 16,
     "discount": 15,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "High-quality wireless earbuds with advanced audio features and a comfortable fit."
   },
   {
-    "name": "Galaxy Buds2",
+    "name": "Galaxy Buds 2",
     "price": 52999,
     "links": "https://www.samsung.com/ar/audio-sound/galaxy-buds/galaxy-buds2-white-sm-r177nzwaaro/",
     "productImg": "https://images.samsung.com/is/image/samsung/p6pim/ar/2108/gallery/ar-galaxy-buds2-r177-sm-r177nzwaaro-thumb-481699001?$172_172_PNG$",
-    "category": "accesorios",
+    "category": "accesories",
     "brand": "samsung",
     "features": "",
     "stock": 18,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "Compact and stylish wireless earbuds delivering excellent sound quality."
   },
-
   {
     "brand": "apple",
     "name": "Watch Edition Series 2 42mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch2-edition-42mm.jpg",
     "price": 799999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 23,
     "discount": 23,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A premium smartwatch with advanced features in a 42mm size."
   },
   {
     "brand": "apple",
     "name": "Watch Edition Series 2 38mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch2-s2-edition-38mm.jpg",
     "price": 749999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 31,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A premium smartwatch with advanced features in a compact 38mm size."
   },
   {
     "brand": "apple",
     "name": "Watch Series 2 42mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch2-s2-42mm.jpg",
     "price": 349999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 25,
     "discount": 10,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A smartwatch offering comprehensive fitness tracking and notifications in a 42mm size."
   },
   {
     "brand": "apple",
     "name": "Watch Series 2 38mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch2-s2-38mm.jpg",
     "price": 349999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 18,
     "discount": 19,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A compact smartwatch with fitness tracking and notification features."
   },
   {
     "brand": "apple",
     "name": "Watch Series 2 Sport 42mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch2-s2-sport-42mm.jpg",
     "price": 249999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 26,
     "discount": 27,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A sporty edition of the Apple Watch Series 2 with fitness-focused features in a 42mm size."
   },
   {
     "brand": "apple",
     "name": "Watch Series 1 Sport 42mm",
     "productImg": "http://cdn2.gsmarena.com/vv/bigpic/apple-watch1-sport-42mm.jpg",
     "price": 199999,
-    "category": "accesorios",
+    "category": "accesories",
     "stock": 11,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "An earlier model of the Apple Watch designed for active lifestyles."
   },
   {
     "brand": "apple",
@@ -308,7 +307,7 @@
     "category": "smartphone",
     "stock": 29,
     "discount": 8,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A classic Apple smartphone with a dual-camera system and larger display."
   },
   {
     "brand": "apple",
@@ -318,7 +317,7 @@
     "category": "smartphone",
     "stock": 18,
     "discount": 15,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A reliable Apple smartphone with a sleek design and strong performance."
   },
   {
     "brand": "apple",
@@ -328,7 +327,7 @@
     "category": "smartphone",
     "stock": 5,
     "discount": 19,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A compact Apple smartphone combining modern performance with a classic design."
   },
   {
     "brand": "apple",
@@ -338,7 +337,7 @@
     "category": "smartphone",
     "stock": 29,
     "discount": 22,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A larger version of the iPhone 6s offering enhanced display size and battery life."
   },
   {
     "brand": "apple",
@@ -348,7 +347,7 @@
     "category": "smartphone",
     "stock": 22,
     "discount": 9,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A reliable smartphone with advanced features for its time."
   },
   {
     "brand": "apple",
@@ -358,7 +357,7 @@
     "category": "tablets",
     "stock": 18,
     "discount": 24,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "An early Apple iPad model featuring Wi-Fi and 3G connectivity for on-the-go use."
   },
   {
     "brand": "apple",
@@ -368,9 +367,8 @@
     "category": "tablets",
     "stock": 12,
     "discount": 23,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A classic Apple iPad with Wi-Fi connectivity for seamless browsing and app use."
   },
-
   {
     "price": 149999,
     "brand": "samsung",
@@ -379,7 +377,7 @@
     "category": "tablets",
     "stock": 24,
     "discount": 8,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A compact tablet with an 8.4-inch display, ideal for media and productivity."
   },
   {
     "price": 249999,
@@ -389,7 +387,7 @@
     "category": "tablets",
     "stock": 17,
     "discount": 0,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A tablet with a 10.5-inch display and LTE support for connectivity anywhere."
   },
   {
     "price": 199999,
@@ -399,6 +397,6 @@
     "category": "tablets",
     "stock": 4,
     "discount": 16,
-    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. "
+    "description": "A tablet offering a large 10.5-inch display for entertainment and multitasking."
   }
 ]
