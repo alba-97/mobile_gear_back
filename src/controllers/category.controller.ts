@@ -1,16 +1,14 @@
 import { Response } from "express";
 import { UserRequest } from "../interfaces/UserRequest";
 import categoryService from "../services/category.service";
-import { HttpError } from "../utils/httpError";
+import { handleError } from "../utils/handleError";
 
 export const listCategories = async (_: UserRequest, res: Response) => {
   try {
     const categories = await categoryService.listCategories();
     res.send(categories);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -20,9 +18,7 @@ export const addCategory = async (req: UserRequest, res: Response) => {
     const data = await categoryService.addCategory(name);
     res.send(data);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -32,9 +28,7 @@ export const editCategory = async (req: UserRequest, res: Response) => {
     await categoryService.editCategory(+req.params.id, name);
     res.sendStatus(200);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -43,8 +37,6 @@ export const deleteCategory = async (req: UserRequest, res: Response) => {
     await categoryService.deleteCategory(+req.params.id);
     res.sendStatus(200);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };

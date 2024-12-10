@@ -8,7 +8,7 @@ import productOrderService from "../services/product-order.service";
 import orderService from "../services/order.service";
 import { UserRequest } from "../interfaces/UserRequest";
 import { ProductOrder } from "../models";
-import { HttpError } from "../utils/httpError";
+import { handleError } from "../utils/handleError";
 
 export const confirmPurchase = async (req: UserRequest, res: Response) => {
   try {
@@ -25,9 +25,7 @@ export const confirmPurchase = async (req: UserRequest, res: Response) => {
     await orderService.confirmProduct(user, order);
     res.sendStatus(204);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -37,9 +35,7 @@ export const addToCheckout = async (req: UserRequest, res: Response) => {
     await orderService.addToCheckout(req.user.id, req.body);
     res.sendStatus(201);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -60,9 +56,7 @@ export const listCheckout = async (req: UserRequest, res: Response) => {
     );
     res.send({ data: productOrders, total });
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -79,9 +73,7 @@ export const purchaseHistory = async (req: UserRequest, res: Response) => {
       res.sendStatus(401);
     }
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -90,8 +82,6 @@ export const listAllOrders = async (_: UserRequest, res: Response) => {
     const productOrders = await productOrderService.getProductOrders();
     res.send(productOrders);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };

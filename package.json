@@ -8,6 +8,7 @@
     "dev": "tsnd --respawn src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsnd src/index.ts",
+    "migrate": "tsnd src/migrate.ts",
     "vercel-build": "echo hello"
   },
   "repository": {

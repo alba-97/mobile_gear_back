@@ -2,7 +2,7 @@ import { Response } from "express";
 import { UserRequest } from "../interfaces/UserRequest";
 import userService from "../services/user.service";
 import authService from "../services/auth.service";
-import { HttpError } from "../utils/httpError";
+import { handleError } from "../utils/handleError";
 
 export const login = async (req: UserRequest, res: Response) => {
   try {
@@ -10,9 +10,7 @@ export const login = async (req: UserRequest, res: Response) => {
     const result = await authService.login(email, password);
     res.send(result);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -21,9 +19,7 @@ export const signup = async (req: UserRequest, res: Response) => {
     await userService.createUser(req.body);
     res.sendStatus(200);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -33,9 +29,7 @@ export const me = async (req: UserRequest, res: Response) => {
     const user = await userService.getUserById(req.user.id);
     res.send(user);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -44,9 +38,7 @@ export const listUsers = async (req: UserRequest, res: Response) => {
     const users = await userService.listUsers();
     res.send(users);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -55,9 +47,7 @@ export const switchPrivileges = async (req: UserRequest, res: Response) => {
     await userService.switchPrivileges(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };
 
@@ -66,8 +56,6 @@ export const removeUser = async (req: UserRequest, res: Response) => {
     await userService.removeUser(Number(req.params.id));
     res.sendStatus(200);
   } catch (err) {
-    if (err instanceof HttpError)
-      return res.status(err.status).send(err.message);
-    if (err instanceof Error) res.status(500).send({ message: err.message });
+    return handleError(res, err);
   }
 };

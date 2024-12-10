@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import db from "./db";
-import seeder from "./seed";
 import routes from "./routes";
 
 const app = express();
@@ -25,14 +24,8 @@ app.use(cookieParser());
 
 app.use("/api", routes);
 
-const force = false;
-
-db.sync({ force })
+db.sync()
   .then(function () {
-    if (force) {
-      seeder();
-      console.log("Fake data created");
-    }
     app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
   })
   .catch((error: Error) => console.log(error));
