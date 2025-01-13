@@ -1,10 +1,9 @@
-import { Response } from "express";
-import { UserRequest } from "../interfaces/UserRequest";
+import { Request, Response } from "express";
 import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import { handleError } from "../utils/handleError";
 
-export const login = async (req: UserRequest, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const result = await authService.login(email, password);
@@ -14,7 +13,7 @@ export const login = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const signup = async (req: UserRequest, res: Response) => {
+export const signup = async (req: Request, res: Response) => {
   try {
     await userService.createUser(req.body);
     res.sendStatus(200);
@@ -23,9 +22,8 @@ export const signup = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const me = async (req: UserRequest, res: Response) => {
+export const me = async (req: Request, res: Response) => {
   try {
-    if (!req.user?.id) return res.sendStatus(401);
     const user = await userService.getUserById(req.user.id);
     res.send(user);
   } catch (err) {
@@ -33,7 +31,7 @@ export const me = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const listUsers = async (req: UserRequest, res: Response) => {
+export const listUsers = async (_: Request, res: Response) => {
   try {
     const users = await userService.listUsers();
     res.send(users);
@@ -42,7 +40,7 @@ export const listUsers = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const switchPrivileges = async (req: UserRequest, res: Response) => {
+export const switchPrivileges = async (req: Request, res: Response) => {
   try {
     await userService.switchPrivileges(Number(req.params.id));
     res.sendStatus(200);
@@ -51,7 +49,7 @@ export const switchPrivileges = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const removeUser = async (req: UserRequest, res: Response) => {
+export const removeUser = async (req: Request, res: Response) => {
   try {
     await userService.removeUser(Number(req.params.id));
     res.sendStatus(200);

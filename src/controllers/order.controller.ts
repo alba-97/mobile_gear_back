@@ -1,19 +1,15 @@
-import { Response } from "express";
-
+import { Response, Request } from "express";
 import dotenv from "dotenv";
-dotenv.config();
-
 import userService from "../services/user.service";
 import productOrderService from "../services/product-order.service";
 import orderService from "../services/order.service";
-import { UserRequest } from "../interfaces/UserRequest";
 import { ProductOrder } from "../models";
 import { handleError } from "../utils/handleError";
 
-export const confirmPurchase = async (req: UserRequest, res: Response) => {
-  try {
-    if (!req.user?.id) return res.sendStatus(401);
+dotenv.config();
 
+export const confirmPurchase = async (req: Request, res: Response) => {
+  try {
     const user = await userService.getUserById(req.user.id);
     if (!user) return res.sendStatus(404);
 
@@ -29,9 +25,8 @@ export const confirmPurchase = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const addToCheckout = async (req: UserRequest, res: Response) => {
+export const addToCheckout = async (req: Request, res: Response) => {
   try {
-    if (!req.user?.id) return res.sendStatus(401);
     await orderService.addToCheckout(req.user.id, req.body);
     res.sendStatus(201);
   } catch (err) {
@@ -39,10 +34,8 @@ export const addToCheckout = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const listCheckout = async (req: UserRequest, res: Response) => {
+export const listCheckout = async (req: Request, res: Response) => {
   try {
-    if (!req.user?.id) return res.sendStatus(401);
-
     const user = await userService.getUserById(req.user.id);
     if (!user || !user.checkoutId) return res.sendStatus(404);
 
@@ -60,9 +53,8 @@ export const listCheckout = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const purchaseHistory = async (req: UserRequest, res: Response) => {
+export const purchaseHistory = async (req: Request, res: Response) => {
   try {
-    if (!req.user?.id) return res.sendStatus(401);
     const user = await userService.getUserById(req.user.id);
     if (user) {
       const orders = await productOrderService.getProductOrders({
@@ -77,7 +69,7 @@ export const purchaseHistory = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const listAllOrders = async (_: UserRequest, res: Response) => {
+export const listAllOrders = async (_: Request, res: Response) => {
   try {
     const productOrders = await productOrderService.getProductOrders();
     res.send(productOrders);

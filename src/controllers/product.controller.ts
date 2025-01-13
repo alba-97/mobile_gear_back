@@ -1,9 +1,8 @@
-import { Response } from "express";
-import { UserRequest } from "../interfaces/UserRequest";
+import { Request, Response } from "express";
 import productService from "../services/product.service";
 import { handleError } from "../utils/handleError";
 
-export const listProducts = async (req: UserRequest, res: Response) => {
+export const listProducts = async (req: Request, res: Response) => {
   try {
     const data = await productService.listProducts(req.query);
     res.status(200).send(data);
@@ -12,7 +11,7 @@ export const listProducts = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const discountedProducts = async (_: UserRequest, res: Response) => {
+export const discountedProducts = async (_: Request, res: Response) => {
   try {
     const data = await productService.discountedProducts();
     res.send(data);
@@ -21,7 +20,7 @@ export const discountedProducts = async (_: UserRequest, res: Response) => {
   }
 };
 
-export const getProduct = async (req: UserRequest, res: Response) => {
+export const getProduct = async (req: Request, res: Response) => {
   try {
     const data = await productService.getProduct(+req.params.id);
     res.send(data);
@@ -30,7 +29,7 @@ export const getProduct = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const editProduct = async (req: UserRequest, res: Response) => {
+export const editProduct = async (req: Request, res: Response) => {
   try {
     await productService.editProduct(+req.params.id, req.body);
     res.sendStatus(200);
@@ -39,7 +38,7 @@ export const editProduct = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const addProduct = async (req: UserRequest, res: Response) => {
+export const addProduct = async (req: Request, res: Response) => {
   try {
     const data = await productService.addProduct(req.body);
     res.send(data);
@@ -48,7 +47,7 @@ export const addProduct = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const deleteProduct = async (req: UserRequest, res: Response) => {
+export const deleteProduct = async (req: Request, res: Response) => {
   try {
     await productService.deleteProduct(+req.params.id);
     res.sendStatus(200);
