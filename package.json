@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsnd --respawn src/index.ts",
-    "start": "tsnd src/index.ts",
+    "start": "node dist/index.js",
     "migrate": "tsnd src/migrate.ts"
   },
   "repository": {
