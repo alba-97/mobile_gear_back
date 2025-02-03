@@ -1,47 +1,46 @@
 import { CreationAttributes } from "sequelize";
-import userRepository from "../repositories/user.repository";
+import UserRepository from "../repositories/user.repository";
 import { User } from "../models";
 import { HttpError } from "../utils/httpError";
 
-const createUser = async (data: CreationAttributes<User>) => {
-  return await userRepository.createOne(data);
-};
+export default class UserService {
+  private userRepository: UserRepository;
 
-const getUserById = async (id: number) => {
-  const user = await userRepository.getOneById(id);
-  if (!user) throw new HttpError(404, "User not found");
-  return user;
-};
+  constructor({ userRepository }: { userRepository: UserRepository }) {
+    this.userRepository = userRepository;
+  }
 
-const listUsers = async () => {
-  return await userRepository.getAll();
-};
+  async createUser(data: CreationAttributes<User>) {
+    return await this.userRepository.createOne(data);
+  }
 
-const switchPrivileges = async (id: number) => {
-  const user = await userRepository.getOneById(id);
-  if (!user) throw new HttpError(404, "User not found");
+  async getUserById(id: number) {
+    const user = await this.userRepository.getOneById(id);
+    if (!user) throw new HttpError(404, "User not found");
+    return user;
+  }
 
-  const { isAdmin, ...rest } = user;
+  async listUsers() {
+    return await this.userRepository.getAll();
+  }
 
-  return await userRepository.updateOneById(id, {
-    ...rest,
-    isAdmin: !isAdmin,
-  });
-};
+  async switchPrivileges(id: number) {
+    const user = await this.userRepository.getOneById(id);
+    if (!user) throw new HttpError(404, "User not found");
 
-const updateUser = async (id: number, data: CreationAttributes<User>) => {
-  return await userRepository.updateOneById(id, data);
-};
+    const { isAdmin, ...rest } = user;
 
-const removeUser = async (id: number) => {
-  return await userRepository.deleteOneById(id);
-};
+    return await this.userRepository.updateOneById(id, {
+      ...rest,
+      isAdmin: !isAdmin,
+    });
+  }
 
-export default {
-  createUser,
-  getUserById,
-  listUsers,
-  switchPrivileges,
-  updateUser,
-  removeUser,
-};
+  async updateUser(id: number, data: CreationAttributes<User>) {
+    return await this.userRepository.updateOneById(id, data);
+  }
+
+  async removeUser(id: number) {
+    return await this.userRepository.deleteOneById(id);
+  }
+}

@@ -1,57 +1,84 @@
 import { Request, Response } from "express";
-import productService from "../services/product.service";
+import { route, POST, GET, PUT, DELETE, before } from "awilix-router-core";
+import ProductService from "../services/product.service";
 import { handleError } from "../utils/handleError";
+import validateUser from "../middleware/validateUser";
+import validateAdmin from "../middleware/validateAdmin";
 
-export const listProducts = async (req: Request, res: Response) => {
-  try {
-    const data = await productService.listProducts(req.query);
-    res.status(200).send(data);
-  } catch (err) {
-    if (err instanceof Error) res.status(500).send({ message: err.message });
-  }
-};
+@route("/products")
+export default class ProductController {
+  private productService: ProductService;
 
-export const discountedProducts = async (_: Request, res: Response) => {
-  try {
-    const data = await productService.discountedProducts();
-    res.send(data);
-  } catch (err) {
-    return handleError(res, err);
+  constructor({ productService }: { productService: ProductService }) {
+    this.productService = productService;
   }
-};
 
-export const getProduct = async (req: Request, res: Response) => {
-  try {
-    const data = await productService.getProduct(+req.params.id);
-    res.send(data);
-  } catch (err) {
-    return handleError(res, err);
+  @route("/")
+  @GET()
+  async listProducts(req: Request, res: Response) {
+    try {
+      const products = await this.productService.listProducts(req.query);
+      res.send(products);
+    } catch (err) {
+      return handleError(res, err);
+    }
   }
-};
 
-export const editProduct = async (req: Request, res: Response) => {
-  try {
-    await productService.editProduct(+req.params.id, req.body);
-    res.sendStatus(200);
-  } catch (err) {
-    return handleError(res, err);
+  @route("/discounted")
+  @GET()
+  async discountedProducts(req: Request, res: Response) {
+    try {
+      const products = await this.productService.discountedProducts();
+      res.send(products);
+    } catch (err) {
+      return handleError(res, err);
+    }
   }
-};
 
-export const addProduct = async (req: Request, res: Response) => {
-  try {
-    const data = await productService.addProduct(req.body);
-    res.send(data);
-  } catch (err) {
-    return handleError(res, err);
+  @route("/:id")
+  @GET()
+  async getProduct(req: Request, res: Response) {
+    try {
+      const product = await this.productService.getProduct(+req.params.id);
+      res.send(product);
+    } catch (err) {
+      return handleError(res, err);
+    }
   }
-};
 
-export const deleteProduct = async (req: Request, res: Response) => {
-  try {
-    await productService.deleteProduct(+req.params.id);
-    res.sendStatus(200);
-  } catch (err) {
-    return handleError(res, err);
+  @route("/")
+  @POST()
+  @before([validateUser, validateAdmin])
+  async addProduct(req: Request, res: Response) {
+    try {
+      await this.productService.addProduct(req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      return handleError(res, err);
+    }
   }
-};
+
+  @route("/:id")
+  @PUT()
+  @before([validateUser, validateAdmin])
+  async editProduct(req: Request, res: Response) {
+    try {
+      await this.productService.editProduct(+req.params.id, req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      return handleError(res, err);
+    }
+  }
+
+  @route("/:id")
+  @DELETE()
+  @before([validateUser, validateAdmin])
+  async deleteProduct(req: Request, res: Response) {
+    try {
+      await this.productService.deleteProduct(+req.params.id);
+      res.sendStatus(200);
+    } catch (err) {
+      return handleError(res, err);
+    }
+  }
+}

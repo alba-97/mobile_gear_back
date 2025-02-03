@@ -8,6 +8,9 @@ class Order extends Model {
   status: string;
   totalPrice: number;
   delivery: Delivery;
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
   setUsers: HasManySetAssociationsMixin<User, number>;
 }
 

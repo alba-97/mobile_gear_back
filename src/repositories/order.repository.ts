@@ -1,39 +1,77 @@
 import { CreationAttributes, WhereOptions } from "sequelize";
-import { Delivery, Order } from "../models";
-import { IOrderQuery } from "../interfaces/Order";
-import minMaxFilter from "../utils/minMaxFilter";
+import { Order, PaymentInfo, Product, User } from "../models";
+import { OrderQuery } from "../interfaces/query";
+import { Op } from "sequelize";
 
-const getAll = async (query: IOrderQuery = {}) => {
-  const { status, mintotalPrice, maxtotalPrice } = query;
-  const where: WhereOptions<Order> = {};
-  if (status) where.status = status;
+export default class OrderRepository {
+  async getAll(query: OrderQuery = {}) {
+    const { status, userId, minTotalPrice, maxTotalPrice, startDate, endDate } =
+      query;
+    const where: WhereOptions<Order> = {};
+    const include = [
+      { model: User, attributes: { exclude: ["password", "salt"] } },
+      { model: Product },
+      { model: PaymentInfo },
+    ];
 
-  where.totalPrice = minMaxFilter(mintotalPrice, maxtotalPrice);
+    if (status) where.status = status;
+    if (userId) where.userId = userId;
 
-  const deliveries = await Order.findAll({ where });
-  return deliveries;
-};
+    if (minTotalPrice !== undefined && maxTotalPrice !== undefined) {
+      where.totalPrice = {
+        [Op.between]: [minTotalPrice, maxTotalPrice],
+      };
+    }
 
-const getOneById = async (id: number) => {
-  return await Order.findByPk(id, {
-    include: Delivery,
-  });
-};
+    if (startDate && endDate) {
+      where.createdAt = {
+        [Op.between]: [startDate, endDate],
+      };
+    }
 
-const updateOneById = async (id: number, data: CreationAttributes<Order>) => {
-  return await Order.update(data, {
-    where: { id },
-  });
-};
+    const orders = await Order.findAll({
+      where,
+      include,
+      order: [["createdAt", "DESC"]],
+    });
 
-const createOne = async (data: CreationAttributes<Order>) => {
-  return await Order.create(data);
-};
+    return orders;
+  }
 
-const deleteOneById = async (id: number) => {
-  return await Order.destroy({
-    where: { id },
-  });
-};
+  async getOneById(id: number) {
+    return await Order.findByPk(id, {
+      include: [
+        { model: User, attributes: { exclude: ["password", "salt"] } },
+        { model: Product },
+        { model: PaymentInfo },
+      ],
+    });
+  }
 
-export default { getAll, getOneById, updateOneById, createOne, deleteOneById };
+  async getOne(data: CreationAttributes<Order>) {
+    return await Order.findOne({
+      where: data,
+      include: [
+        { model: User, attributes: { exclude: ["password", "salt"] } },
+        { model: Product },
+        { model: PaymentInfo },
+      ],
+    });
+  }
+
+  async updateOneById(id: number, data: CreationAttributes<Order>) {
+    return await Order.update(data, {
+      where: { id },
+    });
+  }
+
+  async createOne(data: CreationAttributes<Order>) {
+    return await Order.create(data);
+  }
+
+  async deleteOneById(id: number) {
+    return await Order.destroy({
+      where: { id },
+    });
+  }
+}

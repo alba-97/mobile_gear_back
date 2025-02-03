@@ -1,4 +1,4 @@
-export interface IDeliveryQuery {
+export default interface IDeliveryQuery {
   type?: string;
   minPrice?: number;
   maxPrice?: number;

@@ -1,58 +1,48 @@
-import { CreationAttributes, IncludeOptions, WhereOptions } from "sequelize";
-import { Order, Product, User } from "../models";
-import { Op } from "sequelize";
-import ProductOrder from "../models/ProductOrder";
-import { IProductOrderQuery } from "../interfaces/ProductOrder";
+import { CreationAttributes, WhereOptions } from "sequelize";
+import { Order, Product, ProductOrder } from "../models";
+import { ProductOrderQuery } from "../interfaces/query";
 
-const getAll = async (query: IProductOrderQuery) => {
-  const { username, productName, qty } = query;
-  const where: WhereOptions<IProductOrderQuery> = {};
-  const include: IncludeOptions[] = [
-    { model: User, attributes: { exclude: ["password", "salt"] } },
-    { model: Product },
-    { model: Order },
-  ];
+export default class ProductOrderRepository {
+  async getAll(query: ProductOrderQuery = {}) {
+    const { orderId, productId } = query;
+    const where: WhereOptions<ProductOrder> = {};
 
-  if (qty) where.qty = qty;
+    if (orderId) where.orderId = orderId;
+    if (productId) where.productId = productId;
 
-  if (username)
-    include[0].where = {
-      username: { [Op.iLike]: `%${username}%` },
-    };
+    const productOrders = await ProductOrder.findAll({
+      where,
+      include: [{ model: Order }, { model: Product }],
+    });
+    return productOrders;
+  }
 
-  if (productName)
-    include[1].where = {
-      name: { [Op.iLike]: `%${productName}%` },
-    };
+  async getOneById(id: number) {
+    return await ProductOrder.findByPk(id, {
+      include: [{ model: Order }, { model: Product }],
+    });
+  }
 
-  const productOrders = await ProductOrder.findAll({ where, include });
+  async getOne(data: CreationAttributes<ProductOrder>) {
+    return await ProductOrder.findOne({
+      where: data,
+      include: [{ model: Order }, { model: Product }],
+    });
+  }
 
-  return productOrders;
-};
+  async updateOneById(id: number, data: CreationAttributes<ProductOrder>) {
+    return await ProductOrder.update(data, {
+      where: { id },
+    });
+  }
 
-const getOneById = async (id: number) => {
-  return await Product.findByPk(id, {
-    include: [User, Product, Order],
-  });
-};
+  async createOne(data: CreationAttributes<ProductOrder>) {
+    return await ProductOrder.create(data);
+  }
 
-const create = async (data: CreationAttributes<ProductOrder>[]) => {
-  return await Product.bulkCreate(data);
-};
-
-const updateOneById = async (
-  id: number,
-  data: CreationAttributes<ProductOrder>
-) => {
-  return await Product.update(data, {
-    where: { id },
-  });
-};
-
-const deleteOneById = async (id: number) => {
-  return await Product.destroy({
-    where: { id },
-  });
-};
-
-export default { getAll, getOneById, updateOneById, create, deleteOneById };
+  async deleteOneById(id: number) {
+    return await ProductOrder.destroy({
+      where: { id },
+    });
+  }
+}

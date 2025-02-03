@@ -1,24 +1,38 @@
-import categoryRepository from "../repositories/category.repository";
-import productRepository from "../repositories/product.repository";
+import CategoryRepository from "../repositories/category.repository";
+import ProductRepository from "../repositories/product.repository";
 import { HttpError } from "../utils/httpError";
 
-const listCategories = async () => {
-  return await categoryRepository.getAll();
-};
+export default class CategoryService {
+  private categoryRepository: CategoryRepository;
+  private productRepository: ProductRepository;
 
-const addCategory = async (name: string) => {
-  const existingCategory = await categoryRepository.getOne({ name });
-  if (existingCategory) throw new HttpError(409, "Category already exists");
-  return await categoryRepository.createOne({ name });
-};
+  constructor({ 
+    categoryRepository, 
+    productRepository 
+  }: { 
+    categoryRepository: CategoryRepository, 
+    productRepository: ProductRepository 
+  }) {
+    this.categoryRepository = categoryRepository;
+    this.productRepository = productRepository;
+  }
 
-const editCategory = async (id: number, name: string) => {
-  return await categoryRepository.updateOneById(id, { name });
-};
+  async listCategories() {
+    return await this.categoryRepository.getAll();
+  }
 
-const deleteCategory = async (id: number) => {
-  await productRepository.updateCategories(id);
-  await categoryRepository.deleteOneById(id);
-};
+  async addCategory(name: string) {
+    const existingCategory = await this.categoryRepository.getOne({ name });
+    if (existingCategory) throw new HttpError(409, "Category already exists");
+    return await this.categoryRepository.createOne({ name });
+  }
 
-export default { listCategories, addCategory, editCategory, deleteCategory };
+  async editCategory(id: number, name: string) {
+    return await this.categoryRepository.updateOneById(id, { name });
+  }
+
+  async deleteCategory(id: number) {
+    await this.productRepository.updateCategories(id);
+    await this.categoryRepository.deleteOneById(id);
+  }
+}

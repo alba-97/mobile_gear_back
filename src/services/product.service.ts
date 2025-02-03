@@ -1,39 +1,38 @@
 import { CreationAttributes } from "sequelize";
-import productRepository from "../repositories/product.repository";
+import ProductRepository from "../repositories/product.repository";
 import { Product } from "../models";
-import { IProductQuery } from "../interfaces/Product";
+import { ProductQuery } from "../interfaces/query";
 
-const listProducts = async (query: IProductQuery) => {
-  return await productRepository.getAll(query);
-};
+export default class ProductService {
+  private productRepository: ProductRepository;
 
-const discountedProducts = async () => {
-  return await productRepository.getAll({
-    minDiscount: 20,
-  });
-};
+  constructor({ productRepository }: { productRepository: ProductRepository }) {
+    this.productRepository = productRepository;
+  }
 
-const getProduct = async (id: number) => {
-  return await productRepository.getOneById(id);
-};
+  async listProducts(query: ProductQuery) {
+    return await this.productRepository.getAll(query);
+  }
 
-const editProduct = async (id: number, data: CreationAttributes<Product>) => {
-  return await productRepository.updateOneById(id, data);
-};
+  async discountedProducts() {
+    return await this.productRepository.getAll({
+      minDiscount: 20,
+    });
+  }
 
-const addProduct = async (data: CreationAttributes<Product>) => {
-  return await productRepository.createOne(data);
-};
+  async getProduct(id: number) {
+    return await this.productRepository.getOneById(id);
+  }
 
-const deleteProduct = async (id: number) => {
-  return await productRepository.deleteOneById(id);
-};
+  async editProduct(id: number, data: CreationAttributes<Product>) {
+    return await this.productRepository.updateOneById(id, data);
+  }
 
-export default {
-  listProducts,
-  discountedProducts,
-  getProduct,
-  editProduct,
-  addProduct,
-  deleteProduct,
-};
+  async addProduct(data: CreationAttributes<Product>) {
+    return await this.productRepository.createOne(data);
+  }
+
+  async deleteProduct(id: number) {
+    return await this.productRepository.deleteOneById(id);
+  }
+}

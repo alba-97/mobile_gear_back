@@ -1,16 +1,22 @@
 import { generateToken } from "../config/tokens";
-import userRepository from "../repositories/user.repository";
+import UserRepository from "../repositories/user.repository";
 import { HttpError } from "../utils/httpError";
 
-const login = async (email: string, password: string) => {
-  const user = await userRepository.getOne({ email });
-  if (!user) throw new HttpError(401, "Wrong email or password");
+export default class AuthService {
+  private userRepository: UserRepository;
 
-  const isValid = await user.validatePassword(password);
-  if (!isValid) throw new HttpError(401, "Wrong email or password");
+  constructor({ userRepository }: { userRepository: UserRepository }) {
+    this.userRepository = userRepository;
+  }
 
-  const token = generateToken(user);
-  return { user, token };
-};
+  async login(email: string, password: string) {
+    const user = await this.userRepository.getOne({ email });
+    if (!user) throw new HttpError(401, "Wrong email or password");
 
-export default { login };
+    const isValid = await user.validatePassword(password);
+    if (!isValid) throw new HttpError(401, "Wrong email or password");
+
+    const token = generateToken(user);
+    return { user, token };
+  }
+}

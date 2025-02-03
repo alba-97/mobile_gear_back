@@ -1,9 +1,15 @@
 import { CreationAttributes } from "sequelize";
 import { Delivery } from "../models";
-import deliveryRepository from "../repositories/delivery.repository";
+import DeliveryRepository from "../repositories/delivery.repository";
 
-const createDelivery = async (data: CreationAttributes<Delivery>) => {
-  return await deliveryRepository.createOne(data);
-};
+export default class DeliveryService {
+  private deliveryRepository: DeliveryRepository;
 
-export default { createDelivery };
+  constructor({ deliveryRepository }: { deliveryRepository: DeliveryRepository }) {
+    this.deliveryRepository = deliveryRepository;
+  }
+
+  async createDelivery(data: CreationAttributes<Delivery>) {
+    return await this.deliveryRepository.createOne(data);
+  }
+}

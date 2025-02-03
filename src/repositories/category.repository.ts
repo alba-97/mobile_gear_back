@@ -1,49 +1,39 @@
 import { CreationAttributes, WhereOptions } from "sequelize";
 import { Category } from "../models";
-import { ICategoryQuery } from "../interfaces/Category";
 import { Op } from "sequelize";
+import { CategoryQuery } from "../interfaces/query";
 
-const getAll = async (query: ICategoryQuery = {}) => {
-  const { name } = query;
-  const where: WhereOptions<Category> = {};
-  if (name) where.name = { [Op.iLike]: `%${name}%` };
+export default class CategoryRepository {
+  async getAll(query: CategoryQuery = {}) {
+    const { name } = query;
+    const where: WhereOptions<Category> = {};
+    if (name) where.name = { [Op.iLike]: `%${name}%` };
 
-  const products = await Category.findAll({ where });
-  return products;
-};
+    const products = await Category.findAll({ where });
+    return products;
+  }
 
-const getOneById = async (id: number) => {
-  return await Category.findByPk(id);
-};
+  async getOneById(id: number) {
+    return await Category.findByPk(id);
+  }
 
-const getOne = async (data: CreationAttributes<Category>) => {
-  return await Category.findOne({ where: data });
-};
+  async getOne(data: CreationAttributes<Category>) {
+    return await Category.findOne({ where: data });
+  }
 
-const updateOneById = async (
-  id: number,
-  data: CreationAttributes<Category>
-) => {
-  return await Category.update(data, {
-    where: { id },
-  });
-};
+  async updateOneById(id: number, data: CreationAttributes<Category>) {
+    return await Category.update(data, {
+      where: { id },
+    });
+  }
 
-const createOne = async (data: CreationAttributes<Category>) => {
-  return await Category.create(data);
-};
+  async createOne(data: CreationAttributes<Category>) {
+    return await Category.create(data);
+  }
 
-const deleteOneById = async (id: number) => {
-  return await Category.destroy({
-    where: { id },
-  });
-};
-
-export default {
-  getAll,
-  getOneById,
-  getOne,
-  updateOneById,
-  createOne,
-  deleteOneById,
-};
+  async deleteOneById(id: number) {
+    return await Category.destroy({
+      where: { id },
+    });
+  }
+}

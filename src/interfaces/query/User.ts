@@ -1,4 +1,4 @@
-export interface IUserQuery {
+export default interface IUserQuery {
   isAdmin?: string;
   username?: string;
   email?: string;

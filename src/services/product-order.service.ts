@@ -1,30 +1,32 @@
-import productOrderRepository from "../repositories/product-order.repository";
+import ProductOrderRepository from "../repositories/product-order.repository";
 import { CreationAttributes } from "sequelize";
 import { ProductOrder } from "../models";
-import { IProductOrderQuery } from "../interfaces/ProductOrder";
+import { ProductOrderQuery } from "../interfaces/query";
 
-const getProductOrders = async (where: IProductOrderQuery = {}) => {
-  return await productOrderRepository.getAll(where);
-};
+export default class ProductOrderService {
+  private productOrderRepository: ProductOrderRepository;
 
-const createProductOrder = async (data: CreationAttributes<ProductOrder>[]) => {
-  return await productOrderRepository.create(data);
-};
+  constructor({
+    productOrderRepository,
+  }: {
+    productOrderRepository: ProductOrderRepository;
+  }) {
+    this.productOrderRepository = productOrderRepository;
+  }
 
-const updateProductOrder = async (
-  id: number,
-  data: CreationAttributes<ProductOrder>
-) => {
-  return await productOrderRepository.updateOneById(id, data);
-};
+  async getProductOrders(where: ProductOrderQuery = {}) {
+    return await this.productOrderRepository.getAll(where);
+  }
 
-const deleteProductOrder = async (id: number) => {
-  return await productOrderRepository.deleteOneById(id);
-};
+  async createProductOrder(data: CreationAttributes<ProductOrder>) {
+    return await this.productOrderRepository.createOne(data);
+  }
 
-export default {
-  getProductOrders,
-  createProductOrder,
-  updateProductOrder,
-  deleteProductOrder,
-};
+  async updateProductOrder(id: number, data: CreationAttributes<ProductOrder>) {
+    return await this.productOrderRepository.updateOneById(id, data);
+  }
+
+  async deleteProductOrder(id: number) {
+    return await this.productOrderRepository.deleteOneById(id);
+  }
+}

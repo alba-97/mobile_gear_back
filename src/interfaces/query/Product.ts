@@ -1,4 +1,4 @@
-export interface IProductQuery {
+export default interface IProductQuery {
   modelName?: string;
   categoryName?: string;
   minPrice?: number;
