@@ -2,84 +2,41 @@ import { Request, Response } from "express";
 import { route, POST, GET, before } from "awilix-router-core";
 import OrderService from "../services/order.service";
 import UserService from "../services/user.service";
-import ProductOrderService from "../services/product-order.service";
+import CartItemService from "../services/cart-item.service";
 import { handleError } from "../utils/handleError";
 import validateUser from "../middleware/validateUser";
 import validateAdmin from "../middleware/validateAdmin";
 import dotenv from "dotenv";
-import { ProductOrder } from "../models";
 
 dotenv.config();
 
 @route("/orders")
 export default class OrderController {
   private userService: UserService;
-  private productOrderService: ProductOrderService;
+  private cartItemService: CartItemService;
   private orderService: OrderService;
 
   constructor({
     userService,
-    productOrderService,
+    cartItemService,
     orderService,
   }: {
     userService: UserService;
-    productOrderService: ProductOrderService;
+    cartItemService: CartItemService;
     orderService: OrderService;
   }) {
     this.userService = userService;
-    this.productOrderService = productOrderService;
+    this.cartItemService = cartItemService;
     this.orderService = orderService;
   }
 
-  @route("/checkout")
+  @route("/payment-intents")
   @POST()
   @before([validateUser])
-  async addToCheckout(req: Request, res: Response) {
+  async getPaymentIntent(req: Request, res: Response) {
     try {
-      await this.orderService.addToCheckout(req.user.id, req.body);
-      res.sendStatus(201);
-    } catch (err) {
-      return handleError(res, err);
-    }
-  }
-
-  @route("/checkout")
-  @GET()
-  @before([validateUser])
-  async listCheckout(req: Request, res: Response) {
-    try {
-      const user = await this.userService.getUserById(req.user.id);
-      if (!user || !user.checkoutId) return res.sendStatus(404);
-
-      const productOrders = await this.productOrderService.getProductOrders({
-        orderId: user.checkoutId,
-      });
-      const total = productOrders.reduce(
-        (acc: number, item: ProductOrder) =>
-          acc + (item.product?.price ?? 0) * item.qty,
-        0
-      );
-      res.send({ data: productOrders, total });
-    } catch (err) {
-      return handleError(res, err);
-    }
-  }
-
-  @route("/confirm")
-  @POST()
-  @before([validateUser])
-  async confirmPurchase(req: Request, res: Response) {
-    try {
-      const user = await this.userService.getUserById(req.user.id);
-      if (!user) return res.sendStatus(404);
-
-      const order = await this.orderService.getOrderById(user.checkoutId);
-      if (!order) return res.sendStatus(404);
-
-      if (order.status !== "checkout") return res.sendStatus(401);
-
-      await this.orderService.confirmProduct(user, order);
-      res.sendStatus(204);
+      const paymentIntent = await this.orderService.getPaymentIntent(req.body);
+      res.json(paymentIntent);
     } catch (err) {
       return handleError(res, err);
     }
@@ -92,7 +49,7 @@ export default class OrderController {
     try {
       const user = await this.userService.getUserById(req.user.id);
       if (user) {
-        const orders = await this.productOrderService.getProductOrders({
+        const orders = await this.cartItemService.getCartItems({
           userId: user.id,
         });
         res.send(orders);
@@ -109,8 +66,8 @@ export default class OrderController {
   @before([validateUser, validateAdmin])
   async listAllOrders(_: Request, res: Response) {
     try {
-      const productOrders = await this.productOrderService.getProductOrders();
-      res.send(productOrders);
+      const cartItems = await this.cartItemService.getCartItems();
+      res.send(cartItems);
     } catch (err) {
       return handleError(res, err);
     }

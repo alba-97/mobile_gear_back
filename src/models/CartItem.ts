@@ -4,7 +4,7 @@ import Product from "./Product";
 import Order from "./Order";
 import User from "./User";
 
-class ProductOrder extends Model {
+class CartItem extends Model {
   qty: number;
   orderId: number;
   order?: Order;
@@ -14,7 +14,7 @@ class ProductOrder extends Model {
   user?: User;
 }
 
-ProductOrder.init(
+CartItem.init(
   {
     qty: {
       type: DataTypes.INTEGER,
@@ -25,7 +25,7 @@ ProductOrder.init(
       },
     },
   },
-  { sequelize: db, modelName: "productorders" }
+  { sequelize: db, modelName: "cartitems" }
 );
 
-export default ProductOrder;
+export default CartItem;

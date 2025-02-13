@@ -1,5 +1,5 @@
 import {
-  ProductOrder,
+  CartItem,
   User,
   Brand,
   Category,
@@ -73,19 +73,19 @@ const seeder = async () => {
     deliveryId: 2,
   });
 
-  await ProductOrder.create({
+  await CartItem.create({
     orderId: 1,
     productId: 1,
     userId: 2,
     qty: 2,
   });
-  await ProductOrder.create({
+  await CartItem.create({
     orderId: 1,
     productId: 2,
     userId: 2,
     qty: 3,
   });
-  await ProductOrder.create({
+  await CartItem.create({
     orderId: 2,
     productId: 4,
     userId: 1,

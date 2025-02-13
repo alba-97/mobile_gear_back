@@ -1,42 +1,57 @@
 import { CreationAttributes } from "sequelize";
-import { Order, ProductOrder, User } from "../models";
-import ProductOrderService from "./product-order.service";
+import { Order, CartItem, User } from "../models";
+import CartItemService from "./cart-item.service";
 import OrderRepository from "../repositories/order.repository";
 import UserRepository from "../repositories/user.repository";
 import DeliveryRepository from "../repositories/delivery.repository";
-import ProductOrderRepository from "../repositories/product-order.repository";
+import CartItemRepository from "../repositories/cart-item.repository";
 import { HttpError } from "../utils/httpError";
 import EmailRepository from "../repositories/email.repository";
+import PaymentRepository from "../repositories/payment.repository";
 
 export default class OrderService {
-  private productOrderService: ProductOrderService;
+  private paymentRepository: PaymentRepository;
+  private cartItemService: CartItemService;
   private emailRepository: EmailRepository;
   private orderRepository: OrderRepository;
   private userRepository: UserRepository;
   private deliveryRepository: DeliveryRepository;
-  private productOrderRepository: ProductOrderRepository;
+  private cartItemRepository: CartItemRepository;
 
   constructor({
-    productOrderService,
+    paymentRepository,
+    cartItemService,
     emailRepository,
     orderRepository,
     userRepository,
     deliveryRepository,
-    productOrderRepository,
+    cartItemRepository,
   }: {
-    productOrderService: ProductOrderService;
+    paymentRepository: PaymentRepository;
+    cartItemService: CartItemService;
     emailRepository: EmailRepository;
     orderRepository: OrderRepository;
     userRepository: UserRepository;
     deliveryRepository: DeliveryRepository;
-    productOrderRepository: ProductOrderRepository;
+    cartItemRepository: CartItemRepository;
   }) {
-    this.productOrderService = productOrderService;
+    this.paymentRepository = paymentRepository;
+    this.cartItemService = cartItemService;
     this.emailRepository = emailRepository;
     this.orderRepository = orderRepository;
     this.userRepository = userRepository;
     this.deliveryRepository = deliveryRepository;
-    this.productOrderRepository = productOrderRepository;
+    this.cartItemRepository = cartItemRepository;
+  }
+
+  async getPaymentIntent({
+    amount,
+    currency,
+  }: {
+    amount: number;
+    currency: string;
+  }) {
+    return await this.paymentRepository.getPaymentIntent(amount, currency);
   }
 
   async getOrderById(id: number) {
@@ -55,16 +70,16 @@ export default class OrderService {
 
     order.setUsers([user]);
 
-    const productOrders = data.map((item: { id: number; quantity: number }) => {
+    const cartItems = data.map((item: { id: number; qty: number }) => {
       return {
         orderId: order.id,
         productId: item.id,
         userId: user.id,
-        qty: item.quantity,
+        qty: item.qty,
         status: "checkout",
       };
     });
-    await this.productOrderRepository.createOne(productOrders);
+    await this.cartItemRepository.createOne(cartItems);
     await this.userRepository.updateOneById(userId, { checkoutId: order.id });
   }
 
@@ -73,16 +88,16 @@ export default class OrderService {
   }
 
   async confirmProduct(user: User, order: Order) {
-    this.productOrderService.updateProductOrder(user.id, {
+    this.cartItemService.updateCartItem(user.id, {
       status: "purchased",
     });
     user.setOrders([order]);
-    const productorders = await this.productOrderService.getProductOrders({
+    const cartItems = await this.cartItemService.getCartItems({
       orderId: user.checkoutId,
     });
 
-    const products = productorders
-      .map((item: ProductOrder) => item.product?.name)
+    const products = cartItems
+      .map((item: CartItem) => item.product?.name)
       .join(", ");
 
     await this.emailRepository.send(

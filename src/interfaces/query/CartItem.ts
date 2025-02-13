@@ -1,4 +1,4 @@
-export default interface ProductOrderQuery {
+export default interface CartItemQuery {
   orderId?: number;
   userId?: number;
   productId?: number;

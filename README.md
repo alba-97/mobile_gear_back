@@ -33,7 +33,7 @@ E-commerce for mobile devices and accessories.
 - **Orders**: Handles the execution of cart orders.
 - **PaymentInfo**: Records user payment information.
 - **Payments**: Defines the type of payment used in transactions.
-- **ProductOrders**: Establishes the relationship between products and orders.
+- **CartItems**: Establishes the relationship between products and orders.
 - **Products**: Contains information about the available products.
 - **Users**: Stores data about registered users.
 
