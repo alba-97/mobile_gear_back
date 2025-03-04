@@ -1,70 +1,107 @@
-import {
-  CreationAttributes,
-  IncludeOptions,
-  Op,
-  WhereOptions,
-} from "sequelize";
-import { Brand, Category, Product } from "../models";
-import { ProductQuery } from "../interfaces/query";
-import minMaxFilter from "../utils/minMaxFilter";
+import { Op, Transaction, WhereOptions } from "sequelize";
+import { Product } from "../models";
+import { ProductQuery } from "../interfaces/product";
 
-export default class ProductRepository {
-  async getAll(query: ProductQuery) {
-    const {
-      modelName,
-      categoryName,
-      minPrice,
-      maxPrice,
-      brandName,
-      minDiscount,
-      maxDiscount,
-    } = query;
-    const where: WhereOptions<Product> = {};
-    const include: IncludeOptions[] = [{ model: Brand }, { model: Category }];
+const VALID_SORT_FIELDS = [
+  "id",
+  "name",
+  "price",
+  "category",
+  "stock",
+  "createdAt",
+] as const;
+type SortField = (typeof VALID_SORT_FIELDS)[number];
 
-    if (modelName) where.name = { [Op.iLike]: `%${modelName}%` };
+const getAll = async (options: ProductQuery) => {
+  const {
+    category,
+    minPrice,
+    maxPrice,
+    outOfStock,
+    sortBy,
+    sortOrder,
+    page = 1,
+    limit = 10,
+    searchTerm,
+  } = options;
 
-    where.discount = minMaxFilter(minDiscount, maxDiscount);
-    where.price = minMaxFilter(minPrice, maxPrice);
+  const where: WhereOptions = {};
 
-    if (brandName)
-      include[0].where = {
-        name: { [Op.iLike]: `%${brandName}%` },
-      };
+  if (category) where.category = category;
 
-    if (categoryName)
-      include[1].where = {
-        name: { [Op.iLike]: `%${categoryName}%` },
-      };
+  if (searchTerm)
+    where.name = {
+      [Op.iLike]: `%${searchTerm}%`,
+    };
 
-    const products = await Product.findAll({ where, include });
-
-    return products;
+  if (minPrice || maxPrice) {
+    where.price = {};
+    if (minPrice) where.price[Op.gte] = minPrice;
+    if (maxPrice) where.price[Op.lte] = maxPrice;
   }
 
-  async getOneById(id: number) {
-    return await Product.findByPk(id, {
-      include: [Brand, Category],
-    });
+  if (outOfStock) {
+    if (outOfStock === "yes") where.stock[Op.eq] = 0;
+    if (outOfStock === "no") where.stock[Op.gt] = 0;
   }
 
-  async updateOneById(id: number, data: CreationAttributes<Product>) {
-    return await Product.update(data, {
-      where: { id },
-    });
+  let order: [string, string][] = [["createdAt", "DESC"]];
+  if (
+    sortBy &&
+    VALID_SORT_FIELDS.includes(sortBy as SortField) &&
+    (sortOrder === "asc" || sortOrder === "desc")
+  ) {
+    order = [[sortBy as string, sortOrder.toUpperCase()]];
   }
 
-  async updateCategories(categoryId: number) {
-    await Product.update({ categoryId: 1 }, { where: { categoryId } });
-  }
+  const pageNum = Math.max(1, page);
+  const limitNum = Math.max(1, Math.min(50, limit));
+  const offset = (pageNum - 1) * limitNum;
 
-  async createOne(data: CreationAttributes<Product>) {
-    return await Product.create(data);
-  }
+  const { count, rows: products } = await Product.findAndCountAll({
+    where,
+    order,
+    limit: limitNum,
+    offset: offset,
+  });
+  return { pagination: { count, limit: limitNum, page: pageNum }, products };
+};
 
-  async deleteOneById(id: number) {
-    return await Product.destroy({
-      where: { id },
-    });
-  }
-}
+const getOneById = async (id: number, transaction?: Transaction) => {
+  const product = await Product.findByPk(id, { transaction });
+  return product;
+};
+
+const createOne = async (
+  product: Partial<Product>,
+  transaction?: Transaction
+) => {
+  const newProduct = await Product.create(product, { transaction });
+  return newProduct;
+};
+
+const updateOneById = async (
+  id: number,
+  product: Partial<Product>,
+  transaction?: Transaction
+) => {
+  const updatedProduct = await getOneById(id);
+  if (!updatedProduct) return null;
+  await updatedProduct.update(product, { transaction });
+  return updatedProduct;
+};
+
+const deleteOneById = async (id: number) => {
+  const product = await getOneById(id);
+  if (!product) return null;
+  await product.destroy();
+  return product;
+};
+
+export default {
+  getAll,
+  getOneById,
+  createOne,
+  updateOneById,
+  deleteOneById,
+};

@@ -1,10 +1,10 @@
-import { HttpError } from "./httpError";
-import { Response } from "express";
+import { NextFunction, Response } from "express";
+import { HttpError } from "./errors";
 
-export const handleError = (res: Response, err: unknown) => {
-  if (err instanceof HttpError) {
-    return res.status(err.status).send({ message: err.message });
-  } else {
-    return res.status(500).send({ message: "An unknown error occurred" });
+export default (error: unknown, res: Response, next: NextFunction) => {
+  if (error instanceof HttpError) {
+    res.status(error.statusCode).json({ message: error.message });
+    return;
   }
+  next(error);
 };

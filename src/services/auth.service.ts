@@ -1,22 +1,64 @@
-import { generateToken } from "../config/tokens";
-import UserRepository from "../repositories/user.repository";
-import { HttpError } from "../utils/httpError";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User } from "../models";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../utils/errors";
+import userRepository from "../repositories/user.repository";
 
-export default class AuthService {
-  private userRepository: UserRepository;
+const getUserWithoutPassword = (user: User) => {
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+};
 
-  constructor({ userRepository }: { userRepository: UserRepository }) {
-    this.userRepository = userRepository;
-  }
+const register = async (userData: User) => {
+  const { email, password, firstName, lastName } = userData;
 
-  async login(email: string, password: string) {
-    const user = await this.userRepository.getOne({ email });
-    if (!user) throw new HttpError(401, "Wrong email or password");
+  const existingUser = await userRepository.getOne({ email });
+  if (existingUser) throw new BadRequestError("User already exists");
 
-    const isValid = await user.validatePassword(password);
-    if (!isValid) throw new HttpError(401, "Wrong email or password");
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const token = generateToken(user);
-    return { user, token };
-  }
-}
+  const newUser = await userRepository.createOne({
+    email,
+    password: hashedPassword,
+    firstName,
+    lastName,
+  });
+
+  return getUserWithoutPassword(newUser);
+};
+
+const login = async (email: string, password: string) => {
+  const user = await userRepository.getOne({ email });
+  if (!user) throw new UnauthorizedError("Invalid credentials");
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new UnauthorizedError("Invalid credentials");
+
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    process.env.JWT_SECRET || "fallback_secret",
+    { expiresIn: "2h" }
+  );
+
+  return { token, user: getUserWithoutPassword(user) };
+};
+
+const getProfile = async (userId: number) => {
+  if (!userId) throw new UnauthorizedError("Unauthorized");
+
+  const user = await userRepository.getOneById(userId);
+  if (!user) throw new NotFoundError("User not found");
+
+  return getUserWithoutPassword(user);
+};
+
+export default {
+  register,
+  login,
+  getProfile,
+};

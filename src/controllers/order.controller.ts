@@ -1,75 +1,79 @@
-import { Request, Response } from "express";
-import { route, POST, GET, before } from "awilix-router-core";
-import OrderService from "../services/order.service";
-import UserService from "../services/user.service";
-import CartItemService from "../services/cart-item.service";
-import { handleError } from "../utils/handleError";
-import validateUser from "../middleware/validateUser";
-import validateAdmin from "../middleware/validateAdmin";
-import dotenv from "dotenv";
+import { Request, Response, NextFunction } from "express";
+import handleError from "../utils/handleError";
+import orderService from "../services/order.service";
 
-dotenv.config();
-
-@route("/orders")
-export default class OrderController {
-  private userService: UserService;
-  private cartItemService: CartItemService;
-  private orderService: OrderService;
-
-  constructor({
-    userService,
-    cartItemService,
-    orderService,
-  }: {
-    userService: UserService;
-    cartItemService: CartItemService;
-    orderService: OrderService;
-  }) {
-    this.userService = userService;
-    this.cartItemService = cartItemService;
-    this.orderService = orderService;
+export const createOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const orderData = {
+      ...req.body,
+      userId: req.user!.id,
+    };
+    const order = await orderService.createOrder(orderData);
+    res.status(201).json(order);
+  } catch (error) {
+    handleError(error, res, next);
   }
+};
 
-  @route("/payment-intents")
-  @POST()
-  @before([validateUser])
-  async getPaymentIntent(req: Request, res: Response) {
-    try {
-      const paymentIntent = await this.orderService.getPaymentIntent(req.body);
-      res.json(paymentIntent);
-    } catch (err) {
-      return handleError(res, err);
-    }
+export const getAllOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const filters = {
+      ...req.query,
+      userId: req.user!.id,
+    };
+    const { orders, pagination } = await orderService.getAllOrders(filters);
+    res.json({ orders, pagination });
+  } catch (error) {
+    handleError(error, res, next);
   }
+};
 
-  @route("/history")
-  @GET()
-  @before([validateUser])
-  async purchaseHistory(req: Request, res: Response) {
-    try {
-      const user = await this.userService.getUserById(req.user.id);
-      if (user) {
-        const orders = await this.cartItemService.getCartItems({
-          userId: user.id,
-        });
-        res.send(orders);
-      } else {
-        res.sendStatus(401);
-      }
-    } catch (err) {
-      return handleError(res, err);
-    }
+export const getUserOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const orders = await orderService.getUserOrders(req.user!.id);
+    res.json(orders);
+  } catch (error) {
+    handleError(error, res, next);
   }
+};
 
-  @route("/")
-  @GET()
-  @before([validateUser, validateAdmin])
-  async listAllOrders(_: Request, res: Response) {
-    try {
-      const cartItems = await this.cartItemService.getCartItems();
-      res.send(cartItems);
-    } catch (err) {
-      return handleError(res, err);
-    }
+export const getOrderById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const order = await orderService.getOrderById(+req.params.id, req.user!.id);
+    res.json(order);
+  } catch (error) {
+    handleError(error, res, next);
   }
-}
+};
+
+export const updateOrderStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const order = await orderService.updateOrderStatus(
+      +req.params.id,
+      req.body.status
+    );
+    res.json(order);
+  } catch (error) {
+    handleError(error, res, next);
+  }
+};
