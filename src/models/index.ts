@@ -1,34 +1,31 @@
-import Brand from "./Brand";
-import Category from "./Category";
-import Delivery from "./Delivery";
 import Order from "./Order";
-import PaymentInfo from "./PaymentInfo";
-import Payments from "./Payment";
 import Product from "./Product";
 import User from "./User";
-import CartItem from "./CartItem";
+import OrderItem from "./OrderItem";
 
-User.belongsTo(PaymentInfo);
-User.belongsToMany(Order, { through: "orderhistory" });
+User.hasMany(Order, {
+  foreignKey: "userId",
+});
 
-CartItem.belongsTo(Product);
-CartItem.belongsTo(User);
-CartItem.belongsTo(Order);
+Order.belongsTo(User, {
+  foreignKey: "userId",
+});
 
-Order.belongsTo(Payments);
-Order.belongsTo(Delivery);
-Order.belongsToMany(User, { through: "orderhistory" });
+Product.hasMany(OrderItem, {
+  foreignKey: "productId",
+});
 
-Product.belongsTo(Brand);
-Product.belongsTo(Category);
+OrderItem.belongsTo(Product, {
+  foreignKey: "productId",
+});
 
-export {
-  Brand,
-  Category,
-  Delivery,
-  Order,
-  PaymentInfo,
-  Product,
-  User,
-  CartItem,
-};
+Order.hasMany(OrderItem, {
+  foreignKey: "orderId",
+  as: "items",
+});
+
+OrderItem.belongsTo(Order, {
+  foreignKey: "orderId",
+});
+
+export { User, Product, Order, OrderItem };

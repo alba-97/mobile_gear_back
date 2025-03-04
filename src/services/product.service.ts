@@ -1,38 +1,40 @@
-import { CreationAttributes } from "sequelize";
-import ProductRepository from "../repositories/product.repository";
 import { Product } from "../models";
-import { ProductQuery } from "../interfaces/query";
+import { ProductQuery } from "../interfaces/product";
+import { NotFoundError } from "../utils/errors";
+import productRepository from "../repositories/product.repository";
 
-export default class ProductService {
-  private productRepository: ProductRepository;
+const getAllProducts = async (options: ProductQuery) => {
+  return productRepository.getAll(options);
+};
 
-  constructor({ productRepository }: { productRepository: ProductRepository }) {
-    this.productRepository = productRepository;
-  }
+const getProductById = async (id: number) => {
+  const product = await productRepository.getOneById(id);
+  if (!product) throw new NotFoundError(`Product with id ${id} not found`);
 
-  async listProducts(query: ProductQuery) {
-    return await this.productRepository.getAll(query);
-  }
+  return product;
+};
 
-  async discountedProducts() {
-    return await this.productRepository.getAll({
-      minDiscount: 20,
-    });
-  }
+const createProduct = async (product: Partial<Product>) => {
+  const newProduct = await productRepository.createOne(product);
+  return newProduct;
+};
 
-  async getProduct(id: number) {
-    return await this.productRepository.getOneById(id);
-  }
+const updateProduct = async (id: number, product: Partial<Product>) => {
+  const updatedProduct = await productRepository.updateOneById(id, product);
+  if (!updatedProduct)
+    throw new NotFoundError(`Product with id ${id} not found`);
+  return updatedProduct;
+};
 
-  async editProduct(id: number, data: CreationAttributes<Product>) {
-    return await this.productRepository.updateOneById(id, data);
-  }
+const deleteProduct = async (id: number) => {
+  const product = await productRepository.deleteOneById(id);
+  if (!product) throw new NotFoundError(`Product with id ${id} not found`);
+};
 
-  async addProduct(data: CreationAttributes<Product>) {
-    return await this.productRepository.createOne(data);
-  }
-
-  async deleteProduct(id: number) {
-    return await this.productRepository.deleteOneById(id);
-  }
-}
+export default {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};

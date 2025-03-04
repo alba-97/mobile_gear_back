@@ -1,86 +1,26 @@
-import { CreationAttributes, IncludeOptions, WhereOptions } from "sequelize";
-import { Order, PaymentInfo, User } from "../models";
-import { Op } from "sequelize";
-import { UserQuery } from "../interfaces/query";
+import { WhereOptions } from "sequelize";
+import { UserQuery } from "../interfaces/user";
+import { User } from "../models";
 
-export default class UserRepository {
-  async getAll(query: UserQuery = {}) {
-    const {
-      isAdmin,
-      username,
-      email,
-      firstName,
-      lastName,
-      birthDate,
-      idNumber,
-    } = query;
-    const where: WhereOptions<User> = {};
-    const include: IncludeOptions[] = [{ model: PaymentInfo }];
+const getOne = async (options: UserQuery) => {
+  const { email } = options;
+  const where: WhereOptions = {};
+  if (email) where.email = email;
 
-    if (isAdmin) where.isAdmin = isAdmin;
-    if (username) where.username = { [Op.iLike]: `%${username}%` };
-    if (email) where.email = { [Op.iLike]: `%${email}%` };
+  const user = await User.findOne({
+    where,
+  });
+  return user;
+};
 
-    if (firstName)
-      include[0].where = {
-        firstName: { [Op.iLike]: `%${firstName}%` },
-        ...include[0].where,
-      };
+const getOneById = async (id: number) => {
+  const user = await User.findByPk(id);
+  return user;
+};
 
-    if (lastName)
-      include[0].where = {
-        lastName: { [Op.iLike]: `%${lastName}%` },
-        ...include[0].where,
-      };
+const createOne = async (user: Partial<User>) => {
+  const newUser = await User.create(user);
+  return newUser;
+};
 
-    if (birthDate)
-      include[0].where = {
-        birthDate,
-        ...include[0].where,
-      };
-
-    if (idNumber)
-      include[0].where = {
-        idNumber,
-        ...include[0].where,
-      };
-
-    const products = await User.findAll({
-      where,
-      include,
-      attributes: { exclude: ["password", "salt"] },
-    });
-
-    return products;
-  }
-
-  async getOneById(id: number) {
-    return await User.findByPk(id, {
-      include: [PaymentInfo, Order],
-      attributes: { exclude: ["password", "salt"] },
-    });
-  }
-
-  async getOne(data: CreationAttributes<User>) {
-    return await User.findOne({
-      where: data,
-      include: [PaymentInfo, Order],
-    });
-  }
-
-  async updateOneById(id: number, data: CreationAttributes<User>) {
-    return await User.update(data, {
-      where: { id },
-    });
-  }
-
-  async createOne(data: CreationAttributes<User>) {
-    return await User.create(data);
-  }
-
-  async deleteOneById(id: number) {
-    return await User.destroy({
-      where: { id },
-    });
-  }
-}
+export default { getOne, getOneById, createOne };

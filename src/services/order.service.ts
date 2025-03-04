@@ -1,109 +1,96 @@
-import { CreationAttributes } from "sequelize";
-import { Order, CartItem, User } from "../models";
-import CartItemService from "./cart-item.service";
-import OrderRepository from "../repositories/order.repository";
-import UserRepository from "../repositories/user.repository";
-import DeliveryRepository from "../repositories/delivery.repository";
-import CartItemRepository from "../repositories/cart-item.repository";
-import { HttpError } from "../utils/httpError";
-import EmailRepository from "../repositories/email.repository";
-import PaymentRepository from "../repositories/payment.repository";
+import { BadRequestError, NotFoundError } from "../utils/errors";
+import productRepository from "../repositories/product.repository";
+import orderRepository from "../repositories/order.repository";
+import orderItemsRepository from "../repositories/order-item.repository";
+import transactionsRepository from "../repositories/transaction.repository";
+import { CreateOrderData, OrderQuery } from "../interfaces/order";
 
-export default class OrderService {
-  private paymentRepository: PaymentRepository;
-  private cartItemService: CartItemService;
-  private emailRepository: EmailRepository;
-  private orderRepository: OrderRepository;
-  private userRepository: UserRepository;
-  private deliveryRepository: DeliveryRepository;
-  private cartItemRepository: CartItemRepository;
+const createOrder = async (orderData: CreateOrderData) => {
+  const transaction = await transactionsRepository.createOne();
 
-  constructor({
-    paymentRepository,
-    cartItemService,
-    emailRepository,
-    orderRepository,
-    userRepository,
-    deliveryRepository,
-    cartItemRepository,
-  }: {
-    paymentRepository: PaymentRepository;
-    cartItemService: CartItemService;
-    emailRepository: EmailRepository;
-    orderRepository: OrderRepository;
-    userRepository: UserRepository;
-    deliveryRepository: DeliveryRepository;
-    cartItemRepository: CartItemRepository;
-  }) {
-    this.paymentRepository = paymentRepository;
-    this.cartItemService = cartItemService;
-    this.emailRepository = emailRepository;
-    this.orderRepository = orderRepository;
-    this.userRepository = userRepository;
-    this.deliveryRepository = deliveryRepository;
-    this.cartItemRepository = cartItemRepository;
-  }
+  try {
+    const { items, totalAmount, paymentIntentId, shippingAddress, userId } =
+      orderData;
 
-  async getPaymentIntent({
-    amount,
-    currency,
-  }: {
-    amount: number;
-    currency: string;
-  }) {
-    return await this.paymentRepository.getPaymentIntent(amount, currency);
-  }
-
-  async getOrderById(id: number) {
-    return await this.orderRepository.getOneById(id);
-  }
-
-  async addToCheckout(userId: number, data: CreationAttributes<Order>) {
-    const user = await this.userRepository.getOneById(userId);
-    if (!user) throw new HttpError(404, "User not found");
-
-    const delivery = await this.deliveryRepository.createOne(data);
-    const order = await this.orderRepository.createOne({
-      status: "checkout",
-      delivery: delivery,
-    });
-
-    order.setUsers([user]);
-
-    const cartItems = data.map((item: { id: number; qty: number }) => {
-      return {
-        orderId: order.id,
-        productId: item.id,
-        userId: user.id,
-        qty: item.qty,
-        status: "checkout",
-      };
-    });
-    await this.cartItemRepository.createOne(cartItems);
-    await this.userRepository.updateOneById(userId, { checkoutId: order.id });
-  }
-
-  async createOrder(data: CreationAttributes<Order>) {
-    return await this.orderRepository.createOne(data);
-  }
-
-  async confirmProduct(user: User, order: Order) {
-    this.cartItemService.updateCartItem(user.id, {
-      status: "purchased",
-    });
-    user.setOrders([order]);
-    const cartItems = await this.cartItemService.getCartItems({
-      orderId: user.checkoutId,
-    });
-
-    const products = cartItems
-      .map((item: CartItem) => item.product?.name)
-      .join(", ");
-
-    await this.emailRepository.send(
-      user.email,
-      "Thanks for your purchase!",
-      `You bought ${products}\n\nIt arrives ${order.delivery.eta}`
+    const order = await orderRepository.createOne(
+      {
+        userId,
+        total: totalAmount,
+        status: "completed",
+        paymentIntentId,
+        shippingAddress,
+      },
+      transaction
     );
+
+    for (const item of items) {
+      const product = await productRepository.getOneById(
+        item.productId,
+        transaction
+      );
+
+      if (!product || product.stock < item.quantity)
+        throw new BadRequestError(
+          `Insufficient stock for product ${item.productId}`
+        );
+
+      await orderItemsRepository.createOne(
+        {
+          orderId: order.id,
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price,
+        },
+        transaction
+      );
+
+      await productRepository.updateOneById(
+        item.productId,
+        { stock: product.stock - item.quantity },
+        transaction
+      );
+    }
+
+    await transaction.commit();
+    return orderRepository.getOneById(order.id);
+  } catch (error) {
+    if (transaction) await transaction.rollback();
+    throw error;
   }
-}
+};
+
+const getAllOrders = async (options: OrderQuery) => {
+  const orders = await orderRepository.getAll(options);
+  return orders;
+};
+
+const getUserOrders = async (userId: number) => {
+  const orders = await orderRepository.getAll({ userId });
+  return orders;
+};
+
+const getOrderById = async (orderId: number, userId: number) => {
+  const order = await orderRepository.getOne({
+    id: orderId,
+    userId,
+  });
+
+  if (!order) throw new NotFoundError("Order not found");
+
+  return order;
+};
+
+const updateOrderStatus = async (orderId: number, status: string) => {
+  const order = await orderRepository.updateOneById(orderId, { status });
+  if (!order) throw new NotFoundError("Order not found");
+
+  return order;
+};
+
+export default {
+  createOrder,
+  getAllOrders,
+  getUserOrders,
+  getOrderById,
+  updateOrderStatus,
+};
