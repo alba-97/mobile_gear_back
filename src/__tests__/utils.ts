@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import User from "../models/User";
 import Product from "../models/Product";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 dotenv.config({ path: ".env.test" });
 
