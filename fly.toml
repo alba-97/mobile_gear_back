@@ -1,17 +1,17 @@
-# fly.toml app configuration file generated for mobile-gear-back on 2025-01-13T23:03:18Z
+# fly.toml app configuration file generated for mobile-gear-back-vloksa on 2025-03-12T17:53:13Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'mobile-gear-back'
-primary_region = 'scl'
+app = 'mobile-gear-back-vloksa'
+primary_region = 'eze'
 
 [build]
 
 [http_service]
-  internal_port = 8000
+  internal_port = 3000
   force_https = true
-  auto_stop_machines = 'off'
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
