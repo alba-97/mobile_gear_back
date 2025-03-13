@@ -2,12 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import authService from "../services/auth.service";
 import handleError from "../utils/handleError";
 
-const getSafeUserData = (user: any) => {
-  const userData = user.get({ plain: true });
-  const { password, ...safeUserData } = userData;
-  return safeUserData;
-};
-
 export const register = async (
   req: Request,
   res: Response,
@@ -16,7 +10,7 @@ export const register = async (
   try {
     const userData = req.body;
     const user = await authService.register(userData);
-    res.status(201).json(getSafeUserData(user));
+    res.status(201).json(user);
   } catch (error) {
     handleError(error, res, next);
   }
@@ -43,7 +37,7 @@ export const getProfile = async (
 ): Promise<void> => {
   try {
     const user = await authService.getProfile(req.user.id);
-    res.json(getSafeUserData(user));
+    res.json(user);
   } catch (error) {
     handleError(error, res, next);
   }

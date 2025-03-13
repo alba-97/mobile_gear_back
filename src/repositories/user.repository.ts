@@ -18,7 +18,7 @@ const getOneById = async (id: number) => {
   return user;
 };
 
-const createOne = async (user: Partial<User>) => {
+const createOne = async (user: Partial<User>): Promise<User> => {
   const newUser = await User.create(user);
   return newUser;
 };
